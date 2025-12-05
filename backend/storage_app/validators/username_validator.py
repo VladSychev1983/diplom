@@ -7,4 +7,4 @@ def is_valid_username(username):
         raise serializers.ValidationError({'username_error':'First letter must be a letter.'})
     if not username.isalnum():
         raise serializers.ValidationError({'username_error':'All characters are alphanumeric'})
-    return username        
+    return username
