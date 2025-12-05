@@ -1,0 +1,10 @@
+POST http://127.0.0.1:8000/api/register HTTP/1.1
+content-type: application/json
+
+{
+    "username": "test",
+    "password": "test",
+    "first_name": "Петя",
+    "last_name": "Петров",
+    "email": "petrov@gnivc.ru"
+}
