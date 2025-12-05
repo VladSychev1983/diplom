@@ -1,0 +1,7 @@
+venv
+.env
+pyvenv.cfg
+Scripts
+Lib
+**/__pycache__/
+**/migrations/__pycache__/
