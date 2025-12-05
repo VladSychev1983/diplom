@@ -14,8 +14,8 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            instance =serializer.save()
-            return JsonResponse({"User created": "ok"})
+            instance = serializer.save()
+            return JsonResponse({"User created": "ok"}, status=201)
         #username = request.data.get('name')
         #print(f'{username}')
         return JsonResponse({"post": "ok"})
