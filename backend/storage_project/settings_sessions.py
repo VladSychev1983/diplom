@@ -15,6 +15,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 # Время жизни сессии в секундах. По умолчанию 2 недели = 1209600
 #SESSION_COOKIE_AGE = 120 <- для примера 120 секунд
+SESSION_COOKIE_AGE = 86400 * 7
 
 # Чтобы убивать сессию при закрытии браузера
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -31,3 +32,5 @@ CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 # Разрешаем отправлять cookie при межсайтовых запросах на разрешённые домены:
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CORS_ALLOW_CREDENTIALS = True
+# Использование CSRF токенов хранится в сессиях
+CSRF_USE_SESSIONS = True
