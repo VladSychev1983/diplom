@@ -29,4 +29,5 @@ CORS_ALLOWED_ORIGINS = [
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 # Разрешаем отправлять cookie при межсайтовых запросах на разрешённые домены:
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CORS_ALLOW_CREDENTIALS = True
