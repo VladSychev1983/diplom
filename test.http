@@ -54,16 +54,15 @@ Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:
 PATCH http://127.0.0.1:8000/users/9/ HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 Origin: http://localhost:3000
-X-CSRFToken: csrftoken=1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4; expires=Mon, 07 Dec 2026 21:11:40 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
 Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:55:19 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
+Cookie: csrftoken=1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4; expires=Mon, 07 Dec 2026 21:50:50 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
 
-{
-    "email": "petrov@gnivc.ru"
-}
+email=petrov@gnivc.ru&last_name=Сидоров
 
 ### delete user
-
 DELETE http://127.0.0.1:8000/users/9/ HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
-X-CSRFToken: csrftoken=1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4; expires=Mon, 07 Dec 2026 21:11:40 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
 Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:55:19 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
+Cookie: csrftoken=1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4; expires=Mon, 07 Dec 2026 21:50:50 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
