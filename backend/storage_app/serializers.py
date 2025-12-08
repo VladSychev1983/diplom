@@ -1,13 +1,9 @@
 from rest_framework import serializers
-from rest_framework.response import Response
-from django.http import JsonResponse
 from django.contrib.auth.models import User
 
 from .validators.email_validator import is_valid_email_rgex
 from .validators.password_validator import is_valid_password
 from .validators.username_validator import is_valid_username
-
-import re
 
 class RegisterSerializer(serializers.ModelSerializer):
     
@@ -26,7 +22,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         password = data['password']
         username = data['username']
         email = data['email']
- 
+        first_name = data['first_name']
+        last_name = data['last_name']
+
+        if not all([username, password, email, first_name, last_name]):
+            raise serializers.ValidationError({'error': 'Все поля обязательны.'})
+        
         is_valid_password(password)
         is_valid_username(username)
         is_valid_email_rgex(email)
