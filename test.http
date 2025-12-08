@@ -2,9 +2,24 @@ POST http://127.0.0.1:8000/api/register HTTP/1.1
 content-type: application/json
 
 {
-    "username": "test6",
+    "username": "test7",
     "password": "testssssfff1A@",
     "first_name": "Петя",
     "last_name": "Петров",
-    "email": "petrov@gniv.ru"
+    "email": "test7@lala.ru"
 }
+
+#Check login
+###
+
+POST http://127.0.0.1:8000/api/login HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+username=test7&password=testssssfff1A@
+
+#Check logout
+###
+
+GET http://127.0.0.1:8000/api/logout HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Cookie: sessionid=x2xts4w03wtzhhl6t6j2z1zkcv7lslrc; expires=Mon, 15 Dec 2025 17:36:48 GMT; HttpOnly; Max-Age=60480
