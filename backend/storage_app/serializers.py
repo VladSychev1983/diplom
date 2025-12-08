@@ -5,8 +5,7 @@ from .validators.email_validator import is_valid_email_rgex
 from .validators.password_validator import is_valid_password
 from .validators.username_validator import is_valid_username
 
-class RegisterSerializer(serializers.ModelSerializer):
-    
+class RegisterSerializer(serializers.ModelSerializer):   
     class Meta:
         model = User
         fields = ('username','password','first_name', 'last_name','email')
@@ -38,3 +37,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         instance.set_password(validated_data['password'])
         instance.save() 
         return instance
+    
+""" Admin Area Serializer"""
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

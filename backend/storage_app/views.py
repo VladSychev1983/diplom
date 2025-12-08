@@ -1,18 +1,28 @@
 from django.shortcuts import redirect, render
-
-from rest_framework.permissions import AllowAny
+import logging
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse, FileResponse
 import os
 from django.conf import settings
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, UserSerializer
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+
+from rest_framework import viewsets
+
+logger = logging.getLogger(__name__)
+# csrf token для запросов POST/PUT/DELETE
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    logger.info(f"CSRF token from {request.META.get('REMOTE_ADDR')}")
+    return JsonResponse({'detail':"CSRF cookie set."})
 
 # регистрация нового пользователя.
 class RegisterView(APIView):
@@ -52,3 +62,14 @@ def LogoutView(request):
         response = JsonResponse({'msg':"Logout was successful"})
         response.delete_cookie("sessionid")
         return response
+    else:
+        return JsonResponse({'msg':"User is not auth"})
+
+"""
+Admin Zone Security
+"""
+User = get_user_model()
+class AdminUsersZone(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes= [IsAuthenticated, IsAdminUser]

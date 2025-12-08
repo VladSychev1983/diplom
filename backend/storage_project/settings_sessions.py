@@ -33,4 +33,4 @@ CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CORS_ALLOW_CREDENTIALS = True
 # Использование CSRF токенов хранится в сессиях
-CSRF_USE_SESSIONS = True
+#CSRF_USE_SESSIONS = True
