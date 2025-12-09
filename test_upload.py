@@ -6,20 +6,28 @@ file_path = "test.txt"   # Replace with the path to your file
 try:
     with open(file_path, "rb") as f:
         files = {"file": f}  # "file" is the form field name on the server
+        cookies = {
+                "sessionid": "exs37og9s7sos5hkbiawnno68lgp9fg2",
+                "csrftoken": "brHGuaa6xebJnKdIOM24NkZ2F9vVZshD"
+        }
         custom_headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'multipart/form-data',
             'X-CSRFToken': 'brHGuaa6xebJnKdIOM24NkZ2F9vVZshD',
             'Origin': 'http://localhost:3000',
-            'Cookie': 'sessionid=exs37og9s7sos5hkbiawnno68lgp9fg2; expires=Tue, 16 Dec 2025 11:35:03 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax',
-            'Cookie': 'csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:49 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax',
         }
         payload = {
             'description': 'file',
+            "original_name": "test.txt",
+            "owner": 10
+        }
+        params = {
+            "description": 'file',
             'original_name': 'test.txt'
         }
         
-        response = requests.post(url, data=payload, files=files, headers=custom_headers)
-
+        response = requests.post(url, data=payload, files=files, headers=custom_headers, cookies=cookies)
+        print(response.request.headers)
+        print(response.request.body)
     if response.ok:
         print("File uploaded successfully!")
         print(response.json())  # Print the server's response
