@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .validators.email_validator import is_valid_email_rgex
 from .validators.password_validator import is_valid_password
 from .validators.username_validator import is_valid_username
+from .models import Storage
 
 class RegisterSerializer(serializers.ModelSerializer):   
     class Meta:
@@ -40,3 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+class StorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = '__all__'
+        read_only_fields = ('file',)

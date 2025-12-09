@@ -20,11 +20,12 @@ from rest_framework import routers
 from storage_app.views import RegisterView
 from storage_app.views import LoginView
 from storage_app.views import LogoutView
-from storage_app.views import AdminUsersZone
+from storage_app.views import AdminUsersZone,AdminFilesZone
 from storage_app.views import get_csrf_token
 
 router = routers.DefaultRouter()
 router.register(r'users', AdminUsersZone)
+router.register(r'files', AdminFilesZone)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
