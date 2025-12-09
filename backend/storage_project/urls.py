@@ -22,16 +22,18 @@ from storage_app.views import LoginView
 from storage_app.views import LogoutView
 from storage_app.views import AdminUsersZone,AdminFilesZone
 from storage_app.views import get_csrf_token
+from storage_app.views import UserFilesView
 
 router = routers.DefaultRouter()
 router.register(r'users', AdminUsersZone)
 router.register(r'files', AdminFilesZone)
+router.register(r'owners', UserFilesView, basename='files')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register',RegisterView.as_view(), name='register'),
     path('api/login', LoginView, name='login' ),
     path('api/logout', LogoutView, name='logout'),
-    path('api/get-csrf/', get_csrf_token, name='get-csrf'),
+    path('api/get-csrf/', get_csrf_token, name='get-csrf')
 ]
 urlpatterns += router.urls

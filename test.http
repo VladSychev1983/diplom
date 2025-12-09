@@ -82,8 +82,25 @@ X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
 Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:55:19 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
 Cookie: csrftoken=1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4; expires=Mon, 07 Dec 2026 21:50:50 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
 
-description='Файл администратора'
+description=Файл администратора
 
 ### delete file
 DELETE http://127.0.0.1:8000/files/6/ HTTP/1.1
 X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
+
+### Users Manage files
+
+GET http://127.0.0.1:8000/owners HTTP/1.1
+X-CSRFToken: brHGuaa6xebJnKdIOM24NkZ2F9vVZshD
+Cookie: sessionid=exs37og9s7sos5hkbiawnno68lgp9fg2; expires=Tue, 16 Dec 2025 11:35:03 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax,csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:03 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+Cookie: csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:49 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+
+###edit file 
+### id 7 можем патчить d 
+PATCH http://127.0.0.1:8000/owners/7/ HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+X-CSRFToken: brHGuaa6xebJnKdIOM24NkZ2F9vVZshD
+Cookie: sessionid=exs37og9s7sos5hkbiawnno68lgp9fg2; expires=Tue, 16 Dec 2025 11:35:03 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax,csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:03 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+Cookie: csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:49 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+
+description=Файл пользователя test7 новый

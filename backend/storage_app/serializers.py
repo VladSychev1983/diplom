@@ -47,3 +47,9 @@ class StorageSerializer(serializers.ModelSerializer):
         model = Storage
         fields = '__all__'
         read_only_fields = ('file',)
+
+class UserFilesSerializator(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = '__all__'
+        read_only_fields = ('file',)

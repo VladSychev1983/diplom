@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from django.http import JsonResponse, FileResponse
 import os
 from .serializers import RegisterSerializer, UserSerializer, StorageSerializer
+from .serializers import UserFilesSerializator
 
 from django.contrib.auth.models import User
 from .models import Storage
@@ -107,7 +108,20 @@ class AdminFilesZone(viewsets.ModelViewSet):
         if user_id:
             queryset = Storage.objects.all().order_by('-uploaded_at')
             serializer = StorageSerializer(queryset, many=True)
-            print(f"[info] User with id={user_id} is requested all files.")
+            print(f"[info] User with id={user_id} requests all files.")
         else:
             Response({'error':'Сессия пользователя не найдена.'})
         return Response(serializer.data)
+
+"""
+Authentificated Users Zone 
+"""
+
+class UserFilesView(viewsets.ModelViewSet):
+    serializer_class = UserFilesSerializator
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    queryset = Storage.objects.all()
+    #каждый пользователь видит только свои файлы.
+    def get_queryset(self):
+        return Storage.objects.filter(owner=self.request.user).order_by('-uploaded_at')
+    
