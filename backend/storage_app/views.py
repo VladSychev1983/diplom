@@ -1,12 +1,10 @@
 from django.shortcuts import redirect, render
-import logging
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse, FileResponse
 import os
-from django.conf import settings
 from .serializers import RegisterSerializer, UserSerializer
 
 from django.contrib.auth.models import User
@@ -16,8 +14,8 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 from rest_framework import viewsets
+from storage_project.settings import logger
 
-logger = logging.getLogger(__name__)
 # csrf token для запросов POST/PUT/DELETE
 @ensure_csrf_cookie
 def get_csrf_token(request):
@@ -34,7 +32,8 @@ class RegisterView(APIView):
             return JsonResponse({"msg": f"Username {request.data['username']} was created!"}, status=201)
         #username = request.data.get('name')
         #print(f'{username}')
-        return JsonResponse({"post": "ok"})
+        else:
+            return JsonResponse({"error": "User is not created"})
 
 # аутентификация пользователей.
 @csrf_exempt
