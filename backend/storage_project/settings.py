@@ -130,3 +130,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication', # Авторизация через сессии
     ),
 }
+
+# MEDIA_ROOT = BASE_DIR / 'user_files'
+# MEDIA_URL = '/user_files/'
