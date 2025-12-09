@@ -2,6 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+import uuid
 
 # Папка для хранения файлов.
 STORAGE_ROOT = 'user_files'
@@ -10,10 +11,18 @@ def user_directory_path(instance, filename):
     #путь к файлу storage/user_id/filename
     return os.path.join(STORAGE_ROOT, str(instance.owner.id), filename)
 
+def get_secret_name():
+    my_uuid = uuid.uuid4()
+    return str(my_uuid)
+
+def get_original_name(instance, filename):
+    pass
+
 # Создаем модель для хранения файлов.
 class Storage(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
     original_name = models.CharField(max_length=255)
+    secret_name = models.CharField(max_length=255,default=get_secret_name)
     description = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to=user_directory_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)

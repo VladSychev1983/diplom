@@ -3,7 +3,7 @@ content-type: application/json
 X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
 
 {
-    "username": "test7",
+    "username": "newuser",
     "password": "testssssfff1A@",
     "first_name": "Петя",
     "last_name": "Петров",

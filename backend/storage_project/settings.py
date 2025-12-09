@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'storage_app'
+    'storage_app',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
