@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='storage',
             name='original_name',
-            field=models.CharField(default=storage_app.models.get_original_name, max_length=255),
+            field=models.CharField(max_length=255),
         ),
     ]

@@ -3,23 +3,22 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import serializers
 from django.http import JsonResponse, FileResponse
 import os
 from .serializers import RegisterSerializer, UserSerializer, StorageSerializer
 from .serializers import UserFilesSerializator
-
 from django.contrib.auth.models import User
 from .models import Storage
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-
 from rest_framework import viewsets
-from storage_project.settings import logger
-
 from django.contrib.sessions.models import Session
+import logging
+logger = logging.getLogger(__name__)
+
 # csrf token для запросов POST/PUT/DELETE
 @ensure_csrf_cookie
 def get_csrf_token(request):
@@ -118,10 +117,27 @@ Authentificated Users Zone
 """
 
 class UserFilesView(viewsets.ModelViewSet):
+    queryset = Storage.objects.all()
     serializer_class = UserFilesSerializator
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-    queryset = Storage.objects.all()
     #каждый пользователь видит только свои файлы.
     def get_queryset(self):
         return Storage.objects.filter(owner=self.request.user).order_by('-uploaded_at')
     
+    def perform_create(self, serializer):
+        uploaded_file = self.request.FILES.get('file')
+        if not uploaded_file:
+            logger.warning("No files are attached in the request")
+            raise serializers.ValidationError("No file part in the request")
+        owner_id = self.request.user.id
+        owner = self.request.user
+        filename = uploaded_file.name
+        print(f"owner_id ={owner_id} ,  owner={owner} filename={filename}")
+
+        if Storage.objects.filter(owner_id=owner_id, original_name=filename).exists():
+            logger.info(f"User with id= {owner_id} uploaded {filename} named exists in storage")
+            raise serializers.ValidationError({'file': f"file named {filename}  already exists in storage."})
+        
+        #сохраняем запись.
+        instance = serializer.save(owner=owner,original_name=filename)
+        logger.info(f"User {self.request.user.username} uploaded file {instance.original_name}")

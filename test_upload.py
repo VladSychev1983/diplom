@@ -1,31 +1,48 @@
 import requests
+from requests_toolbelt import MultipartEncoder
 
 url = "http://127.0.0.1:8000/owners/"  # Replace with your actual upload URL
 file_path = "test.txt"   # Replace with the path to your file
+
 
 try:
     with open(file_path, "rb") as f:
         files = {"file": f}  # "file" is the form field name on the server
         cookies = {
-                "sessionid": "exs37og9s7sos5hkbiawnno68lgp9fg2",
-                "csrftoken": "brHGuaa6xebJnKdIOM24NkZ2F9vVZshD"
+                "sessionid": "k068of08zopt5vuhrnx46vinxvjhmcm5",
+                "csrftoken": "PLMpsWTZKh1t1Ttfksb8h2CJwCYjDF4J"
         }
-        custom_headers = {
-            'Content-Type': 'multipart/form-data',
-            'X-CSRFToken': 'brHGuaa6xebJnKdIOM24NkZ2F9vVZshD',
-            'Origin': 'http://localhost:3000',
-        }
+        # custom_headers = {
+        #     'X-CSRFToken': 'PLMpsWTZKh1t1Ttfksb8h2CJwCYjDF4J',
+        #     'Origin': 'http://localhost:3000',
+        # }
         payload = {
-            'description': 'file',
+            'description': 'New file',
             "original_name": "test.txt",
-            "owner": 10
+            "owner": "1"
         }
         params = {
             "description": 'file',
             'original_name': 'test.txt'
         }
+        #test muliti part form
         
-        response = requests.post(url, data=payload, files=files, headers=custom_headers, cookies=cookies)
+        multipart_data = MultipartEncoder(
+        fields={
+        'description': 'New file',
+        'original_name': "test.txt",
+        "owner": "1",
+        'file': (file_path, f, 'text/plain')
+         }
+        )
+        
+        custom_headers = {
+            'Content-Type': multipart_data.content_type,
+            'X-CSRFToken': 'PLMpsWTZKh1t1Ttfksb8h2CJwCYjDF4J',
+            'Origin': 'http://localhost:3000',
+        }
+        response = requests.post(url, data=multipart_data, headers=custom_headers, cookies=cookies)
+        #response = requests.post(url, data=payload, files=files, headers=custom_headers, cookies=cookies)
         print(response.request.headers)
         print(response.request.body)
     if response.ok:
