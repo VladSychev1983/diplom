@@ -14,10 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
-            # validate here data['password']
-            # username состоит и латинских букв и цифр, первый символ буква, длина от 4 до 20
-            # email это email
-            # пароль 6 символов 1 цифра 1 заглавная и 1 спец символ
+        # валидация данных при регистрации пользователя.
         password = data['password']
         username = data['username']
         email = data['email']
