@@ -1,11 +1,9 @@
-from django.shortcuts import redirect, render
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from django.http import JsonResponse, FileResponse
-import os
 from .serializers import RegisterSerializer, UserSerializer, StorageSerializer
 from .serializers import UserFilesSerializator
 from django.contrib.auth.models import User
@@ -17,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework import viewsets
 from django.contrib.sessions.models import Session
 import logging
+import json
+
 logger = logging.getLogger(__name__)
 
 # csrf token для запросов POST/PUT/DELETE
@@ -54,14 +54,20 @@ class RegisterView(APIView):
 @csrf_exempt
 def LoginView(request):
     if request.method == 'POST':
-        username = request.POST.get('username',None)
-        password = request.POST.get('password', None)
+        # username = request.POST.get('username', None)
+        # password = request.POST.get('password', None)
+        # json format data
+        data =json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+
         print(f"{username}")
         print(f"{password}")
+        print(request)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            response = JsonResponse({"msg":"Authorization was successful"})
+            response = JsonResponse({"success":"Authorization was successful"})
             response.set_cookie("sessionid", request.session.session_key)
             return response
         else:

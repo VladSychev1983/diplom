@@ -3,6 +3,12 @@ from .settings_database import DATABASES
 from .settings_sessions import *
 import os
 from dotenv import load_dotenv
+from django.utils.deprecation import MiddlewareMixin
+
+# Add custom headers to response drf Access-Control-Allow-Origin
+class CustomHeaderMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        request.META['Access-Control-Allow-Origin'] = '*'
 
 # Load environment variables from .env file
 load_dotenv()
@@ -68,7 +74,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
+    'storage_project.settings.CustomHeaderMiddleware'
 ]
 
 ROOT_URLCONF = 'storage_project.urls'

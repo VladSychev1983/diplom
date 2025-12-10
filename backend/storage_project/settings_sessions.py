@@ -4,14 +4,14 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # Чтобы cookie не были доступны из JS, нужен атрибут HttpOnly
 CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = False
 
 # Домены, которым мы доверяем
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 # Когда приложение заимеет production окружение и https соединение
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 # Время жизни сессии в секундах. По умолчанию 2 недели = 1209600
 #SESSION_COOKIE_AGE = 120 <- для примера 120 секунд
@@ -23,7 +23,7 @@ SESSION_COOKIE_AGE = 86400 * 7
 # Разрешаем межсайтовые запросы для домена, на котором находится React приложение
 CORS_ALLOWED_ORIGINS = [
   'http://localhost:3000',
-  'http://127.0.0.1:3000', 
+  'http://127.0.0.1:3000' 
 ]
 
 # Разрешаем заголовки для межсайтовых запросов
@@ -34,3 +34,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CORS_ALLOW_CREDENTIALS = True
 # Использование CSRF токенов хранится в сессиях
 #CSRF_USE_SESSIONS = True
+
+# Разрешаем любые CORS запросы. (не рекомендуется для продакшена)
+CORS_ALLOW_ALL_ORIGINS = True
+SECURE_CROSS_ORIGIN_OPENER_POLICY=None
+CORS_ALLOW_METHODS = [ 'GET', 'POST', 'PUT', 'DELETE', 'PATCH']

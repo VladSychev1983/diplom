@@ -2,11 +2,9 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
-from django.core.files.storage import FileSystemStorage
 
 # Папка для хранения файлов.
 STORAGE_ROOT = 'user_files'
-custom_storage = FileSystemStorage(location=STORAGE_ROOT)
 
 def user_directory_path(instance, filename):
     #путь к файлу storage/user_id/filename
