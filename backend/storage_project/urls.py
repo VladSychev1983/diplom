@@ -6,8 +6,6 @@ from storage_app.views import LoginView, LogoutView
 from storage_app.views import AdminUsersZone,AdminFilesZone
 from storage_app.views import get_csrf_token
 from storage_app.views import UserFilesView
-# from django.conf import settings
-# from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 router.register(r'users', AdminUsersZone)
@@ -22,4 +20,3 @@ urlpatterns = [
     path('api/get-csrf/', get_csrf_token, name='get-csrf')
 ] 
 urlpatterns += router.urls
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

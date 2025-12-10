@@ -129,7 +129,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication', # Авторизация через сессии
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user':  '10000/day', # Лимит для UserRateThrottle
+        'anon':  '1000/day', #Лимит для AnonRateThrottle
+    }
 }
-
-# MEDIA_ROOT = BASE_DIR / 'user_files'
-# MEDIA_URL = '/user_files/'
