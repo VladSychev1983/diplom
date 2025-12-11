@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer} from 'redux-persist'
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import rootReducer from '../reducers'; 
 
@@ -16,7 +17,18 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-     reducer: persistedReducer
+     reducer: persistedReducer,
+     middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore the actions dispatched by redux-persist themselves 
+        // if they are causing issues *within* redux-persist's own flow.
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        
+        // OR explicitly ignore specific paths if you *must* store a function (not recommended):
+        // ignoredPaths: ['register', 'rehydrate'], 
+      },
+    }),
  });
 const persistor = persistStore(store);
 
