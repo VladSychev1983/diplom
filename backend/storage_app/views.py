@@ -37,6 +37,15 @@ def get_user_id_from_session_key(session_key):
         pass
     return None
 
+#получаем ip address запроса.
+def get_client_ip(request):
+    x_forwarded_header = request.META.get('HTTP_X_FORWARDED_FOR')
+    if  x_forwarded_header:
+        ip = x_forwarded_header.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 # регистрация нового пользователя.
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -44,19 +53,17 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user_instance = serializer.save()
-            # auto-autenticate and login the user in (Session ID cookie sets automatically)
             login(request, user_instance)
             response_data = {
                 "success":f"Username {request.data['username']} was created and logged in!",
                  "data": RegisterSerializer(user_instance).data
             }
-            logger.info(f"Username {request.data['username']} was created and logged in!")
-    
-            #return JsonResponse({"success": f"Username {request.data['username']} was created and logged in!", "data": {user_instance}}, status=201)
+            logger.info(f'[INFO] Getted a request for registering user from IP {get_client_ip(request)}')
+            logger.info(f"[INFO] Username {request.data['username']} was created and logged in!")
             return  Response(data=response_data, status=201)
-        #username = request.data.get('name')
-        #print(f'{username}')
         else:
+            logger.info(f'[INFO] Getted a request for registering user from IP {get_client_ip(request)}')
+            logger.warning(f'[ERR] ERROR Username {request.data['username']} was not created!')
             return JsonResponse({"error": "User is not created"})
 
 # аутентификация пользователей.
