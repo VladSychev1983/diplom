@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
 import counterReducer from './counterReducer';
-import todosReducer from './todosReducer';
+import { userReducer } from './userReducer';
 
 const rootReducer = combineReducers({
   counter: counterReducer, // The 'counter' key will be the state's key
-  todos: todosReducer,      // The 'todos' key will be the state's key
-
+  user: userReducer,      // Save an authentificated user data state. 
 });
 
 export default rootReducer;
