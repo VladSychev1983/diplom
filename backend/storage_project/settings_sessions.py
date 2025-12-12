@@ -1,10 +1,10 @@
 # Поскольку Django и React - разные источники, ставим Lax
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 # Чтобы cookie не были доступны из JS, нужен атрибут HttpOnly
 CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
 
 # Домены, которым мы доверяем
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
@@ -16,6 +16,8 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 # Время жизни сессии в секундах. По умолчанию 2 недели = 1209600
 #SESSION_COOKIE_AGE = 120 <- для примера 120 секунд
 SESSION_COOKIE_AGE = 86400 * 7
+
+#SESSION_SAVE_EVERY_REQUEST = True
 
 # Чтобы убивать сессию при закрытии браузера
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True

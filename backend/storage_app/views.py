@@ -43,8 +43,17 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            instance = serializer.save()
-            return JsonResponse({"msg": f"Username {request.data['username']} was created!"}, status=201)
+            user_instance = serializer.save()
+            # auto-autenticate and login the user in (Session ID cookie sets automatically)
+            login(request, user_instance)
+            response_data = {
+                "success":f"Username {request.data['username']} was created and logged in!",
+                 "data": RegisterSerializer(user_instance).data
+            }
+            logger.info(f"Username {request.data['username']} was created and logged in!")
+    
+            #return JsonResponse({"success": f"Username {request.data['username']} was created and logged in!", "data": {user_instance}}, status=201)
+            return  Response(data=response_data, status=201)
         #username = request.data.get('name')
         #print(f'{username}')
         else:

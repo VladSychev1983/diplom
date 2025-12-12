@@ -9,7 +9,7 @@ from .models import Storage
 class RegisterSerializer(serializers.ModelSerializer):   
     class Meta:
         model = User
-        fields = ('username','password','first_name', 'last_name','email')
+        fields = ('username','password','first_name', 'last_name','email', 'is_superuser', 'is_active', 'is_staff')
         extra_kwargs = {
             'password' : {'write_only': True}
         }
