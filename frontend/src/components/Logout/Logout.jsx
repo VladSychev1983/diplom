@@ -3,6 +3,7 @@ import { logout } from "../../apiService/requests";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { logoutUser, clearAuthTokens } from "../../store/reducers/userReducer";
+import Cookies from 'js-cookie'
 
 function Logout({sendRequest, setSendRequest}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -22,10 +23,12 @@ function Logout({sendRequest, setSendRequest}) {
                     setIsLoading(false);
                     return
                 }
-
+            //очищаем данные пользователя.
 		    dispatch(clearAuthTokens());
 		    dispatch(logoutUser());
 		    localStorage.removeItem('root');
+            Cookies.remove('sessionid');
+            Cookies.remove('csrftoken');
             
             setIsLoading(false);
             setSendRequest(false);

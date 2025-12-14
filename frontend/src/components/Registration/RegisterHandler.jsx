@@ -52,7 +52,7 @@ function RegisterHandler ({formData, sendRequest, setSendRequest, signUP, get_cs
         if(sendRequest) {
             fetchData();
         }
-    }, [sendRequest, dispatch, formData, navigate, setSendRequest, signUP]);
+    }, [sendRequest, dispatch, formData, navigate, setSendRequest, signUP, get_csrf_token]);
 
     //если идет загрузка показываем спиннер или текст загрузка.
     if(isLoading) {

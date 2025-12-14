@@ -34,5 +34,18 @@ const logout =  async () => {
   });
   return response;
 }
+//user login
+const signIN = async (formData) => {
+    const response = await fetch(HOST_URL + '/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': Cookies.get('csrftoken'),
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include',
+    });
+    return response;
+}
 
-export { signUP, logout }
+export { signUP, logout, signIN }

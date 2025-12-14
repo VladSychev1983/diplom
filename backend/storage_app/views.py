@@ -76,20 +76,25 @@ def LoginView(request):
         data =json.loads(request.body)
         username = data.get('username')
         password = data.get('password')
-
-        print(f"{username}")
-        print(f"{password}")
-        print(request)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            response_data = {
+                "success":f"Username {username} was created and logged in!",
+                 "data": UserSerializer(user).data
+            }
+            logger.info(f'[INFO] User {username} was authentificated successfully.')
             response = JsonResponse({"success":"Authorization was successful"})
             response.set_cookie("sessionid", request.session.session_key)
-            return response
+            logger.info(f'[INFO] Getted an authentification request from IP {get_client_ip(request)}')
+            logger.info(f"[INFO] Username {username} was logged in!")
+            return JsonResponse(response_data, status=200)
         else:
-            return JsonResponse({"msg":"Incorrect credentials"})
+            logger.critical(f'[ERR] User {username} attempted register is failed. Incorrect credentials.')
+            return JsonResponse({"error":"Incorrect credentials"}, status=401)
     else:
-        return JsonResponse({"msg":"Method is not allowed."})
+        logger.warning(f'[ERR] User {username} attempted register is metod not allowed.')
+        return JsonResponse({"error":"Method is not allowed."}, status=403)
 
 # выход пользователей.
 def LogoutView(request):
