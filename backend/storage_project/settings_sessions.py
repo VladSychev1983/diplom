@@ -7,7 +7,7 @@ CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
 
 # Домены, которым мы доверяем
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','http://127.0.0.1:5173']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','http://127.0.0.1:5173','http://localhost:5173']
 
 # Когда приложение заимеет production окружение и https соединение
 # CSRF_COOKIE_SECURE = True
@@ -26,7 +26,8 @@ SESSION_COOKIE_AGE = 86400 * 7
 CORS_ALLOWED_ORIGINS = [
   'http://localhost:3000',
   'http://127.0.0.1:3000',
-  'http://127.0.0.1:5173' 
+  'http://127.0.0.1:5173',
+  'http://localhost:5173', 
 ]
 
 # Разрешаем заголовки для межсайтовых запросов

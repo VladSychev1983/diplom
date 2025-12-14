@@ -2,8 +2,9 @@ import React, {useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/reducers/userReducer";
+import Cookies from 'js-cookie'
 
-function RegisterHandler ({formData, sendRequest, setSendRequest, signUP}) {
+function RegisterHandler ({formData, sendRequest, setSendRequest, signUP, get_csrf_token}) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null)
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ function RegisterHandler ({formData, sendRequest, setSendRequest, signUP}) {
         const fetchData = async () => {
             setIsLoading(true);
             try {
+                //запрашиваем токен csrf 
+                await get_csrf_token()
                 //обьект ответа от django получаем в json.
                 const response = await signUP(formData);
                 const result = await response.json();
@@ -26,7 +29,7 @@ function RegisterHandler ({formData, sendRequest, setSendRequest, signUP}) {
                 setIsLoading(false)
                 setSendRequest(false)
                 //отправляем пользователя а файлы.
-                navigate('/');
+                navigate('/files');
             }
             catch(err) {
                 console.log(err)

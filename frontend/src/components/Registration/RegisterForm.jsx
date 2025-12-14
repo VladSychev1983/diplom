@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signUP } from "../../apiService/requests";
+import { signUP, get_csrf_token } from "../../apiService/requests";
 import RegisterHandler from "./RegisterHandler";
 
 function RegisterForm() {
@@ -51,7 +51,8 @@ function RegisterForm() {
     <RegisterHandler formData={formData} sendRequest={sendRequest}
     // передаем также функцию которя сбросит триггер.
     setSendRequest={setSendRequest}
-    signUP={signUP}>
+    signUP={signUP}
+    get_csrf_token={get_csrf_token}> 
     </RegisterHandler>
         </React.Fragment>
     )
