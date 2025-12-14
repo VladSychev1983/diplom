@@ -34,7 +34,7 @@ function App() {
     <React.Fragment>
       <Router>
       <nav>
-        <ul>
+        <ul className='nav'>
           <li>
             <Link to="/">Home</Link>
           </li>
