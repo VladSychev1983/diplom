@@ -4,7 +4,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 
 # Чтобы cookie не были доступны из JS, нужен атрибут HttpOnly
 CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = False
 
 # Домены, которым мы доверяем
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000','http://127.0.0.1:5173','http://localhost:5173']

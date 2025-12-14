@@ -95,12 +95,12 @@ def LoginView(request):
 def LogoutView(request):
     if request.user.is_authenticated:
         logout(request)
-        response = JsonResponse({'msg':"Logout was successful"})
+        response = JsonResponse({'success':"Logout was successful"})
         request.session.flush()
         response.delete_cookie("sessionid")
         return response
     else:
-        return JsonResponse({'msg':"User is not auth"})
+        return JsonResponse({'error':"User is not auth"})
 
 """
 Admin Secret Zone

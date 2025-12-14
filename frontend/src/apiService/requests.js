@@ -7,8 +7,9 @@ export function get_csrf_token() {
     return fetch(`${HOST_URL}/api/get-csrf/`)
 }
 
-console.log('X-CSRFToken:', Cookies.get('csrftoken'))
+console.log('[Requests.js] X-CSRFToken:', Cookies.get('csrftoken'))
 
+//user registration
 const signUP = async (formData) => {
     const response = await fetch(HOST_URL + '/api/register', {
         method: 'POST',
@@ -21,5 +22,17 @@ const signUP = async (formData) => {
     });
     return response
 }
+//user logout
+const logout =  async () => {
+  const response = await fetch(`${HOST_URL}/api/logout`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+      cookie: `sessionid=${Cookies.get('sessionid')}`,
+    },
+  });
+  return response;
+}
 
-export { signUP }
+export { signUP, logout }

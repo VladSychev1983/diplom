@@ -6,9 +6,6 @@ function UserProfileHeader() {
 const userData = useSelector((state) => state.user?.userData);
 const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-console.log(`UserData:  ${userData}`)
-console.log(`IsAuthenticated:  ${isAuthenticated}`)
-
 //если пользователь не аутентифицирован или данные в redux отсутствуют.
 if (!isAuthenticated || !userData) {
     return (
