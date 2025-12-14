@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import Home from './components/Home';
 import Register from './components/Registration/RegisterForm';
 import Login from './components/Login';
+import UserProfileHeader from './components/AuthUser/UserProfileHeader';
 import './App.css'
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
           </li>
         </ul>
       </nav>
-
+ <UserProfileHeader />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
