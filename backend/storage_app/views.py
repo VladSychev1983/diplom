@@ -16,14 +16,17 @@ from rest_framework import viewsets
 from django.contrib.sessions.models import Session
 import logging
 import json
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.middleware.csrf import get_token
 
 logger = logging.getLogger(__name__)
 
 # csrf token для запросов POST/PUT/DELETE
 @ensure_csrf_cookie
 def get_csrf_token(request):
+    csrf_token_value = get_token(request) 
     logger.info(f"CSRF token from {request.META.get('REMOTE_ADDR')}")
-    return JsonResponse({'detail':"CSRF cookie set."})
+    return JsonResponse({'detail':"CSRF cookie set", 'csrftoken': csrf_token_value})
 
 #получаем user id из сессии.
 def get_user_id_from_session_key(session_key):
@@ -147,6 +150,8 @@ class UserFilesView(viewsets.ModelViewSet):
     queryset = Storage.objects.all()
     serializer_class = UserFilesSerializator
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    parser_classes = (MultiPartParser, FormParser)
+    
     #каждый пользователь видит только свои файлы.
     def get_queryset(self):
         return Storage.objects.filter(owner=self.request.user).order_by('-uploaded_at')
@@ -156,8 +161,15 @@ class UserFilesView(viewsets.ModelViewSet):
         response['Access-Control-Allow-Origin'] = '*'
         return response
     
+    def create(self, request,*args, **kwargs):
+        print(f"DEBUGGING request.data: {request.data}")
+        print(f"DEBUGGING request.FILES: {request.FILES}")
+        #вызываем стандартную логику perform_create через serializer.save()
+        return super().create(request, *args, **kwargs)
+    
     def perform_create(self, serializer):
-        uploaded_file = self.request.FILES.get('file')
+        #uploaded_file = self.request.FILES.get('file')
+        uploaded_file = self.request.data.get('file')
         if not uploaded_file:
             logger.warning("No files are attached in the request")
             raise serializers.ValidationError("No file part in the request")
@@ -173,3 +185,17 @@ class UserFilesView(viewsets.ModelViewSet):
         #сохраняем запись.
         instance = serializer.save(owner=owner,original_name=filename)
         logger.info(f"User {self.request.user.username} uploaded file {instance.original_name}")
+
+    def perform_destroy(self, instance):
+        logger.critical(f"[ERR] {self.request.user.username} Удаление файла: {instance.file.name}")
+        instance.file.delete(save=False)
+        super().perform_destroy(instance)
+        #логика полсе удаления.
+        logger.critical(f"[ERR] Объект {instance.id} успешно удален из БД.")
+
+
+    def destroy(self, request,*args, **kwargs):
+        instance = self.get_object()
+        logger.critical(f"[ERR] {self.request.user.username} is deleted file {instance.file.name}")
+        self.perform_destroy(instance)
+        return JsonResponse({'success':'file was removed.'}, status=204)

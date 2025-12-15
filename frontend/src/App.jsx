@@ -8,6 +8,7 @@ import UserProfileHeader from './components/AuthUserHeader/UserProfileHeader';
 import FileStorage from './components/AuthenticatedUsers/FileStorage';
 import ProtectedUserRoutes from './components/Routes/AutentificatedRouters';
 import { useSelector } from "react-redux";
+import Cookies from 'js-cookie';
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const userData = useSelector((state) => state.user?.userData);
   const sessionid = useSelector((state) => state.user?.sessionId);
+  const csrftoken = useSelector((state) => state.user?.csrfToken);
   const [sendRequest, setSendRequest] = useState(false)
 
   const handlerLogout = () => {
@@ -29,7 +31,11 @@ function App() {
   if (userData) {
     isAdmin = userData['is_superuser'];
   }
+
+
   console.log("[App.jsx] SESSION ID IN REDUX:", sessionid);
+  console.log("[App.jsx] CSRF TOKEN ID IN REDUX:", csrftoken);
+ 
   return (
     <React.Fragment>
        <UserProfileHeader />

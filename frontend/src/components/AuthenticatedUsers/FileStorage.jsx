@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormUpload from "./FormUpload";
-import { getFiles, deleteFile } from "../../apiService/requests";
+import { getFiles, deleteFile, get_csrf_token } from "../../apiService/requests";
 
 function FileStorage() {
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ function FileStorage() {
     const fetchFiles = async () => {
     try {
       setLoading(true);
+      get_csrf_token();
       // Запрос списка файлов к API
       const response = await getFiles();
       if (!response.ok) {

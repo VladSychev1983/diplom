@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, syncAuthTokens, setCsrfToken } from "../../store/reducers/userReducer";
 import Cookies from 'js-cookie'
-import { signIN, get_csrf_token } from "../../apiService/requests";
+import { signIN } from "../../apiService/requests";
 
 function LoginHandler({formData, sendRequest, setSendRequest}) {
         const [isLoading, setIsLoading] = useState(false);
@@ -15,8 +15,6 @@ function LoginHandler({formData, sendRequest, setSendRequest}) {
                 const fetchData = async () => {
                     setIsLoading(true);
                     try {
-                        //запрашиваем токен csrf 
-                        await get_csrf_token()
                         //обьект ответа от django получаем в json.
                         const response = await signIN(formData);
                         const result = await response.json();
@@ -26,11 +24,13 @@ function LoginHandler({formData, sendRequest, setSendRequest}) {
                             return 
                         }
                         //если ответ успешный сохраняем data/sessinid/csrftoken в redux.
+                        const csrftoken = Cookies.get('csrftoken')
                         dispatch(setUser(result.data));
+                        dispatch(setCsrfToken(csrftoken));
                         console.log('[LoginHandler.jsx] sessionid:', Cookies.get('sessionid'))
-                        console.log('[LoginHandler.jsx] csrftoken:', Cookies.get('csrftoken'))
+                        console.log('[LoginHandler.jsx] csrftoken:', Cookies.get('csrftoken'));
                         dispatch(syncAuthTokens());
-                        dispatch(setCsrfToken(Cookies.get('csrftoken')))
+                        dispatch(setCsrfToken(csrftoken));
         
                         setIsLoading(false);
                         setSendRequest(false);

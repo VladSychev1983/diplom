@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { uploadFile } from "../../apiService/requests";
+import { useSelector } from "react-redux";
 
 const FormUpload = ({ onUploadSuccess }) => {
+const userData = useSelector((state) => state.user?.userData);
 const [file, setFile] = useState(null);
 const [description, setDescription] = useState('');
 const [uploading, setUploading] = useState(false);
 const [message, setMessage] = useState('');
+const [originalname, setOriginalName] = useState('');
 
 const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -24,9 +27,13 @@ const handleSubmit = async (e) => {
 const formData = new FormData();
 formData.append('file', file); // 'file' - имя поля, ожидаемое на сервере
 formData.append('description', description); // Дополнительные данные
+formData.append('original_name', originalname);
+formData.append('owner', userData['id'])
+console.log('[FormUpload.jsx] formData:',formData);
 
 const fetchData =  async (formData) => {
 try {
+
       const response = await uploadFile(formData);
 
       if (!response.ok) {
@@ -37,6 +44,8 @@ try {
       setMessage(`Файл успешно загружен: ${result.original_name}`);
       setFile(null);
       setDescription('');
+      setOriginalName('');
+
       // Вызов функции обратного вызова для обновления списка файлов в родительском компоненте
       if (onUploadSuccess) {
         onUploadSuccess();
@@ -48,7 +57,7 @@ try {
     }
 }
 if(setUploading) {
-    fetchData();
+    fetchData(formData);
 }
   };
 
@@ -63,6 +72,15 @@ return (
           placeholder="Описание файла"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          disabled={uploading}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="Оригинальное имя"
+          value={originalname}
+          onChange={(e) => setOriginalName(e.target.value)}
           disabled={uploading}
         />
       </div>

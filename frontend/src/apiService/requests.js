@@ -7,6 +7,20 @@ export function get_csrf_token() {
     return fetch(`${HOST_URL}/api/get-csrf/`)
 }
 
+// const fetchCsrfToken = async () => {
+//       const response = await fetch(`${HOST_URL}/api/get-csrf/`, {
+//     method: 'GET',
+//     credentials: 'include', 
+//   });
+//     if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         console.log("Response data:", data);
+//         console.log("CSRF Token received:", data.csrftoken);
+//         return data.csrftoken;
+// }
+
 console.log('[Requests.js] X-CSRFToken:', Cookies.get('csrftoken'))
 
 //user registration
@@ -62,7 +76,7 @@ const getFiles =  async () => {
 }
 //delete owner file
 const deleteFile =  async (id) => {
-  const response = await fetch(`${HOST_URL}/ownerfiles/${id}`, {
+  const response = await fetch(`${HOST_URL}/ownerfiles/${id}/`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -76,12 +90,14 @@ const deleteFile =  async (id) => {
 
 //upload file multipart formData.
 const uploadFile =  async (formData) => {
-    const response = await fetch(HOST_URL + '/api/upload', {
+    console.log('[Request.js] formData:',formData)
+    const response = await fetch(HOST_URL + '/ownerfiles/', {
         method: 'POST',
         headers: {
             'X-CSRFToken': Cookies.get('csrftoken'),
+            //'X-CSRFToken': 'o9xFaxK7imJTC4oSWEUUklvN625mIVNd',  
         },
-        body: JSON.stringify(formData),
+        body: formData,
         cookie: `sessionid=${Cookies.get('sessionid')}`,
         credentials: 'include',
     });
