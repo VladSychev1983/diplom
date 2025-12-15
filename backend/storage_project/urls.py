@@ -8,9 +8,9 @@ from storage_app.views import get_csrf_token
 from storage_app.views import UserFilesView
 
 router = routers.DefaultRouter()
-router.register(r'users', AdminUsersZone)
-router.register(r'files', AdminFilesZone)
-router.register(r'owners', UserFilesView, basename='owner-files')
+router.register(r'adminusers', AdminUsersZone)
+router.register(r'adminfiles', AdminFilesZone)
+router.register(r'ownerfiles', UserFilesView, basename='owner-files')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

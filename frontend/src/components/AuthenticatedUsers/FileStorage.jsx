@@ -1,0 +1,112 @@
+import React, {useEffect, useState} from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import FormUpload from "./FormUpload";
+import { getFiles, deleteFile } from "../../apiService/requests";
+
+function FileStorage() {
+    const navigate = useNavigate();
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const sessionid = useSelector((state) => state.user.sessionid);
+    //state of files
+    const [files, setFiles] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    //отправляем пользователя домой если не авторизован.
+    useEffect(() => {
+    if(!sessionid && !isAuthenticated) {
+        navigate('/');
+    return
+    }
+    },[sessionid, isAuthenticated, navigate])
+
+    const fetchFiles = async () => {
+    try {
+      setLoading(true);
+      // Запрос списка файлов к API
+      const response = await getFiles();
+      if (!response.ok) {
+        throw new Error('Ошибка при загрузке списка файлов');
+      }
+      const data = await response.json();
+      console.log('[FileStorage.jsx] fetch files data:',data)
+      setFiles(data); // Ожидается массив объектов файлов
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+
+    const handleDelete = async (id) => {
+    try {
+      // Запрос на удаление файла
+      const response = await deleteFile(id);
+
+      if (!response.ok) {
+        throw new Error('Ошибка при удалении файла');
+      }
+      // Обновление списка файлов после успешного удаления
+      fetchFiles();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleEdit = async (id) => {
+    //some logic for editing file.
+    console.log(id)
+  }
+    return (
+    <React.Fragment>
+          <div>
+      <h1>Хранилище файлов</h1>
+      {/* Компонент формы загрузки файлов */}
+      <FormUpload onUploadSuccess={fetchFiles} />
+      
+      <h2>Список файлов</h2>
+      {loading && <p>Загрузка файлов...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {!loading && files.length > 0 ? (
+        <table className="files_table" border="1" cellPadding="10">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Оригинальное имя</th>
+              <th>Описание</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            {files.map((file) => (
+              <tr key={file.id}>
+                <td>{file.id}</td>
+                <td>
+ {/* Ссылка на скачивание файла */}
+                  <a href={file.download_url || `/api/download/${file.id}`} target="_blank" rel="noopener noreferrer">
+                    {file.original_name}
+                  </a>
+                </td>
+                <td>{file.description}</td>
+                <td>
+                  <button onClick={() => handleEdit(file.id)}>Редактировать</button>
+                  <button onClick={() => handleDelete(file.id)}>Удалить</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        !loading && <p>Файлы не найдены.</p>
+      )}
+    </div>
+    </React.Fragment>
+)
+}
+export default FileStorage;

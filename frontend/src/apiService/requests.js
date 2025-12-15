@@ -48,4 +48,45 @@ const signIN = async (formData) => {
     return response;
 }
 
+//get owner files.
+const getFiles =  async () => {
+  const response = await fetch(`${HOST_URL}/ownerfiles`, {
+    method: 'GET',
+    headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+//delete owner file
+const deleteFile =  async (id) => {
+  const response = await fetch(`${HOST_URL}/ownerfiles/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+
+//upload file multipart formData.
+const uploadFile =  async (formData) => {
+    const response = await fetch(HOST_URL + '/api/upload', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': Cookies.get('csrftoken'),
+        },
+        body: JSON.stringify(formData),
+        cookie: `sessionid=${Cookies.get('sessionid')}`,
+        credentials: 'include',
+    });
+    return response;
+}
+
 export { signUP, logout, signIN }
+export { getFiles, deleteFile, uploadFile }

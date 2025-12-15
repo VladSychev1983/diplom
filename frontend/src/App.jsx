@@ -5,7 +5,7 @@ import Register from './components/Registration/RegisterForm';
 import Login from './components/Login/Login';
 import Logout from './components/Logout/Logout';
 import UserProfileHeader from './components/AuthUserHeader/UserProfileHeader';
-import UserFilePage from './components/AuthenticatedUsers/UserFilePage';
+import FileStorage from './components/AuthenticatedUsers/FileStorage';
 import ProtectedUserRoutes from './components/Routes/AutentificatedRouters';
 import { useSelector } from "react-redux";
 import './App.css'
@@ -32,36 +32,33 @@ function App() {
   console.log("[App.jsx] SESSION ID IN REDUX:", sessionid);
   return (
     <React.Fragment>
+       <UserProfileHeader />
       <Router>
       <nav>
         <ul className='nav'>
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
-            {!isAuthenticated && <Link to="/register">Register</Link>}
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-          {isAuthenticated && (<Link to="/files">Files</Link>)}
-          </li>
+            {!isAuthenticated && (<li><Link to="/register">Register</Link></li>)}
+            
+            {!isAuthenticated && (<li><Link to="/login">Login</Link></li>)}
+                    
+          {isAuthenticated && (<li><Link to="/files">Files</Link></li>)}
+          
           {isAdmin && (<li><Link to="/files">AdminArea</Link></li>)}
   
-          <li>
-            {isAuthenticated && (<Link to="/logout" onClick={handlerLogout}>logout</Link>)}
-          </li>
+            {isAuthenticated && (<li><Link to="/logout" onClick={handlerLogout}>logout</Link></li>)}
+          
         </ul>
       </nav>
- <UserProfileHeader />
+ {/* <UserProfileHeader /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       {/* Protected User Routes */}
         <Route element={< ProtectedUserRoutes />}>
-        <Route path="/files"element={<UserFilePage />} />
+        <Route path="/files"element={<FileStorage />} />
         <Route path="/logout" element={<Logout sendRequest={sendRequest} setSendRequest={setSendRequest} />} />
         </Route>
         {/* Protected Admin Routes */}

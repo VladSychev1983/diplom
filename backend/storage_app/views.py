@@ -151,6 +151,11 @@ class UserFilesView(viewsets.ModelViewSet):
     def get_queryset(self):
         return Storage.objects.filter(owner=self.request.user).order_by('-uploaded_at')
     
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        response['Access-Control-Allow-Origin'] = '*'
+        return response
+    
     def perform_create(self, serializer):
         uploaded_file = self.request.FILES.get('file')
         if not uploaded_file:
