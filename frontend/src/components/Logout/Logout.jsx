@@ -26,7 +26,7 @@ function Logout({sendRequest, setSendRequest}) {
             //очищаем данные пользователя.
 		    dispatch(clearAuthTokens());
 		    dispatch(logoutUser());
-		    localStorage.removeItem('root');
+		    localStorage.removeItem('persist:root');
             Cookies.remove('sessionid');
             Cookies.remove('csrftoken');
             
