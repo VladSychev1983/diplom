@@ -175,16 +175,19 @@ class UserFilesView(viewsets.ModelViewSet):
         owner_id = self.request.user.id
         owner = self.request.user
         filename = uploaded_file.name
-        print(f"owner_id ={owner_id} ,  owner={owner} filename={filename}")
+        original_name = self.request.data['original_name']
+        name, extension = os.path.splitext(filename)
+        original_name_new =  f"{original_name}{extension}"
+        print(f"owner_id ={owner_id}, owner={owner} original_name={original_name} filename={filename}")
 
         if Storage.objects.filter(owner_id=owner_id, original_name=filename).exists():
             # тут надо логику переименования файла в случае существования.!!!
-            logger.info(f"User with id= {owner_id} uploaded {filename} named exists in storage")
+            logger.info(f"[INFO] User with id= {owner_id} uploaded {filename} named exists in storage")
             raise serializers.ValidationError({'file': f"file named {filename}  already exists in storage."})
         
         #сохраняем запись.
-        instance = serializer.save(owner=owner,original_name=filename)
-        logger.info(f"User {self.request.user.username} uploaded file {instance.original_name}")
+        instance = serializer.save(owner=owner,original_name=original_name_new)
+        logger.info(f"[INFO] User {self.request.user.username} uploaded file {instance.original_name}")
 
     def perform_destroy(self, instance):
         logger.critical(f"[ERR] {self.request.user.username} Удаление файла: {instance.file.name}")
