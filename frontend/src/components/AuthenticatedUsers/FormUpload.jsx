@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { uploadFile } from "../../apiService/requests";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
 const FormUpload = ({ onUploadSuccess }) => {
-const userData = useSelector((state) => state.user?.userData);
+//const userData = useSelector((state) => state.user?.userData);
 const [file, setFile] = useState(null);
 const [description, setDescription] = useState('');
 const [uploading, setUploading] = useState(false);
@@ -28,7 +28,7 @@ const formData = new FormData();
 formData.append('file', file); // 'file' - имя поля, ожидаемое на сервере
 formData.append('description', description); // Дополнительные данные
 formData.append('original_name', originalname);
-formData.append('owner', Number(userData['id']))
+//formData.append('owner', userData['id'])
 console.log('[FormUpload.jsx] formData:',formData);
 
 const fetchData =  async (formData) => {

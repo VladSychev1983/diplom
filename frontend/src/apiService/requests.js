@@ -74,7 +74,7 @@ const deleteFile =  async (id) => {
 
 //upload file multipart formData.
 const uploadFile =  async (formData) => {
-    console.log('[Request.js] formData:',formData)
+    console.log('[Request.js] upload file formData:',formData)
     const response = await fetch(HOST_URL + '/ownerfiles/', {
         method: 'POST',
         headers: {

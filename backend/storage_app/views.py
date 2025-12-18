@@ -178,7 +178,7 @@ class UserFilesView(viewsets.ModelViewSet):
         print(f"owner_id ={owner_id} ,  owner={owner} filename={filename}")
 
         if Storage.objects.filter(owner_id=owner_id, original_name=filename).exists():
-            # тут надо логику переименования файла в случае существования.
+            # тут надо логику переименования файла в случае существования.!!!
             logger.info(f"User with id= {owner_id} uploaded {filename} named exists in storage")
             raise serializers.ValidationError({'file': f"file named {filename}  already exists in storage."})
         
