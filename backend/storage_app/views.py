@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework import viewsets
 from django.contrib.sessions.models import Session
 import re,os,json,logging
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from django.middleware.csrf import get_token
 
 logger = logging.getLogger(__name__)
@@ -149,7 +149,7 @@ class UserFilesView(viewsets.ModelViewSet):
     queryset = Storage.objects.all()
     serializer_class = UserFilesSerializator
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     
     #каждый пользователь видит только свои файлы.
     def get_queryset(self):
@@ -178,6 +178,7 @@ class UserFilesView(viewsets.ModelViewSet):
         print(f"owner_id ={owner_id} ,  owner={owner} filename={filename}")
 
         if Storage.objects.filter(owner_id=owner_id, original_name=filename).exists():
+            # тут надо логику переименования файла в случае существования.
             logger.info(f"User with id= {owner_id} uploaded {filename} named exists in storage")
             raise serializers.ValidationError({'file': f"file named {filename}  already exists in storage."})
         
@@ -189,8 +190,18 @@ class UserFilesView(viewsets.ModelViewSet):
         logger.critical(f"[ERR] {self.request.user.username} Удаление файла: {instance.file.name}")
         instance.file.delete(save=False)
         super().perform_destroy(instance)
-        #логика полсе удаления.
+        #логика после удаления.
         logger.critical(f"[ERR] Объект {instance.id} успешно удален из БД.")
+    
+    #переопределям метод обновления файлов.
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        logger.info("request data :",request.data)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
     def destroy(self, request,*args, **kwargs):
@@ -207,7 +218,7 @@ def download_file_view(request, file_id):
     if(bool(isfile_uuid)):
         #логика запроса по специальной ссылке.
         logger.info(f'запрос по специальной ссылке.')
-        
+
         return JsonResponse({"success":"запрос по специальной ссылке."}, json_dumps_params={'ensure_ascii': False}, status=200)      
     else:
         #логика запроса по id файла.

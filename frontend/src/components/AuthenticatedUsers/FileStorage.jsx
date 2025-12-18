@@ -3,15 +3,20 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormUpload from "./FormUpload";
 import { getFiles, deleteFile, get_csrf_token, downloadFile } from "../../apiService/requests";
+import { getFileInfo, editFile } from "../../apiService/requests";
+import FormEdit from "./FormEdit";
 
 function FileStorage() {
     const navigate = useNavigate();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const sessionid = useSelector((state) => state.user.sessionid);
-    //state of files
+    //состояния отображения файлов.
     const [files, setFiles] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    //состояния редактирования файлов.
+    const [isModalOpen, setisModalOpen] = useState(null);
+    const [editData, setEditData] = useState(null);
     
     //отправляем пользователя домой если не авторизован.
     useEffect(() => {
@@ -84,13 +89,41 @@ function FileStorage() {
       }
     };
 
-  const handleEdit = async (id) => {
-    //some logic for editing file.
-    console.log(id)
+  const handleEdit = async (file_id) => {
+    //логика при редактировании файла.
+    const response = await getFileInfo(file_id);
+    const data = await response.json();
+    setEditData(data);
+    setisModalOpen(true);
+    console.log(response);
   }
+  const onClose = () => {
+    //при закрытии модального окна меняем состояния.
+    setisModalOpen(false);
+    setEditData(null)
+  }
+  const onSave = async (updatedData, file_id) => {
+    //логика обновления при редактировании.
+    try {
+    const response = await editFile(updatedData, file_id);
+    if(response.ok) {
+      console.log("Файл успешно обновлен!");
+      //закрываем модальное окно и перезагружаем файлы.
+      onClose();
+      fetchFiles();
+    } else {
+      console.log("Ошибка при сохранении файла.")
+    }
+  } catch (error) {
+    console.error("Ошибка сохранения:", error);
+    }
+  }
+
     return (
     <React.Fragment>
           <div>
+      {/* Компонент модального окна редактирования. */}
+      <FormEdit isOpen={isModalOpen} data={editData} onClose={onClose} onSave={onSave} />
       <h1>Хранилище файлов</h1>
       {/* Компонент формы загрузки файлов */}
       <FormUpload onUploadSuccess={fetchFiles} />
@@ -115,7 +148,6 @@ function FileStorage() {
                 <td>{file.id}</td>
                 <td>
  {/* Ссылка на скачивание файла */}
-                  {/* <a href={file.download_url || `/api/download/${file.id}/`} target="_blank" rel="noopener noreferrer"> {file.original_name}</a> */}
                   <a href="#" rel="noopener noreferrer" onClick={(e) => handleDownload(e, file.id, file.original_name)}>
                     {file.original_name}
                   </a>

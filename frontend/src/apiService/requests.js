@@ -99,6 +99,36 @@ const downloadFile = async (fileID) => {
   });
     return response;
 }
+//get information about file.
+//get owner files.
+const getFileInfo =  async (file_id) => {
+  const response = await fetch(`${HOST_URL}/ownerfiles/${file_id}/`, {
+    method: 'GET',
+    headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+
+const editFile = async(updatedData, file_id) => {
+    console.log("[Requsts.js] Data for update:", updatedData)
+    const response = await fetch(`${HOST_URL}/ownerfiles/${file_id}/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+    body: JSON.stringify(updatedData)
+
+  });
+  return response;
+}
 
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
+export { getFileInfo, editFile }

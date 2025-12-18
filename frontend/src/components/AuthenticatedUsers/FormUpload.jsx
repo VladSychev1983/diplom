@@ -28,14 +28,12 @@ const formData = new FormData();
 formData.append('file', file); // 'file' - имя поля, ожидаемое на сервере
 formData.append('description', description); // Дополнительные данные
 formData.append('original_name', originalname);
-formData.append('owner', userData['id'])
+formData.append('owner', Number(userData['id']))
 console.log('[FormUpload.jsx] formData:',formData);
 
 const fetchData =  async (formData) => {
 try {
-
       const response = await uploadFile(formData);
-
       if (!response.ok) {
         throw new Error('Ошибка загрузки файла');
       }
