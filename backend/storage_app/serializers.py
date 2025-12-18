@@ -56,6 +56,3 @@ class UserFilesSerializator(serializers.ModelSerializer):
         model = Storage
         fields = ['id', 'file', 'description', 'original_name', 'owner', 'uploaded_at']
         read_only_fields = ('id','owner_id','uploaded_at', 'owner')
-        extra_kwargs = {
-            'file' : {'write_only': True}
-        }

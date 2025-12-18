@@ -11,9 +11,13 @@ const FormEdit = ({data, isOpen, onClose, onSave}) => {
         <form onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.target);
+          const formValues = Object.fromEntries(formData)
+          //получаем расширение файла из data.
+          const extension = data.file.split('.').pop();
+          const cleanData = { ...formValues, original_name: `${formValues.original_name}.${extension}`}
+          console.log('[FormEdit.jsx] send formData:', cleanData)
           // Обновленные данные возвращаем в onSave handler.
-          console.log('[FormEdit.jsx] send formData:', formData)
-          onSave(Object.fromEntries(formData), data.id);
+          onSave(cleanData, data.id);
         }}>
           <label>Оригинальное имя:</label>
           <input type="text" name="original_name" defaultValue={data.original_name}></input>        

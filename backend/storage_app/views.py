@@ -17,6 +17,8 @@ from django.contrib.sessions.models import Session
 import re,os,json,logging
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from django.middleware.csrf import get_token
+import uuid
+from django.core.files.storage import FileSystemStorage
 
 logger = logging.getLogger(__name__)
 
@@ -170,24 +172,34 @@ class UserFilesView(viewsets.ModelViewSet):
         #uploaded_file = self.request.FILES.get('file')
         uploaded_file = self.request.data.get('file')
         if not uploaded_file:
-            logger.warning("No files are attached in the request")
-            raise serializers.ValidationError("No file part in the request")
-        owner_id = self.request.user.id
+            logger.warning("[WRN] No files are attached in the request")
+            raise serializers.ValidationError("[WRN] No file part in the request")
         owner = self.request.user
-        filename = uploaded_file.name
-        original_name = self.request.data['original_name']
-        name, extension = os.path.splitext(filename)
-        original_name_new =  f"{original_name}{extension}"
-        print(f"owner_id ={owner_id}, owner={owner} original_name={original_name} filename={filename}")
+        owner_id = self.request.user.id
+        upload_path = os.path.join('user_files', str(owner_id))
+        fs = FileSystemStorage()
+        user_filename = self.request.data.get('original_name')
 
-        if Storage.objects.filter(owner_id=owner_id, original_name=filename).exists():
-            # тут надо логику переименования файла в случае существования.!!!
-            logger.info(f"[INFO] User with id= {owner_id} uploaded {filename} named exists in storage")
-            raise serializers.ValidationError({'file': f"file named {filename}  already exists in storage."})
-        
-        #сохраняем запись.
-        instance = serializer.save(owner=owner,original_name=original_name_new)
-        logger.info(f"[INFO] User {self.request.user.username} uploaded file {instance.original_name}")
+        name, extension = os.path.splitext(uploaded_file.name)
+        if not user_filename.endswith(extension):
+            user_filename = f'{user_filename}{extension}'
+
+        full_upload_path = os.path.join(upload_path, user_filename)
+        final_path_name = fs.get_available_name(full_upload_path)
+        final_filename = os.path.basename(final_path_name)
+
+        if Storage.objects.filter(owner=owner, original_name=user_filename).exists():
+            original_name_to_save = final_filename
+        else:
+            original_name_to_save = final_filename
+            
+        actual_saved_path = fs.save(final_path_name, uploaded_file)
+        try:
+            serializer.save(owner=owner, original_name=original_name_to_save, file=actual_saved_path)
+            logger.info(f"[INFO] User {owner.username} uploaded file {actual_saved_path}")
+        except Exception as e:
+            logger.error(f"[ERR] Error saving to DB: {e}")
+            raise serializers.ValidationError({"detail": "Ошибка сохранения в базу данных"})
 
     def perform_destroy(self, instance):
         logger.critical(f"[ERR] {self.request.user.username} Удаление файла: {instance.file.name}")
@@ -200,7 +212,7 @@ class UserFilesView(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        logger.info("request data :",request.data)
+        logger.info("[INFO] Edit file request data :", request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
