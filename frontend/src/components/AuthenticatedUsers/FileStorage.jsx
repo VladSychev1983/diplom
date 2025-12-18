@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormUpload from "./FormUpload";
-import { getFiles, deleteFile, get_csrf_token } from "../../apiService/requests";
+import { getFiles, deleteFile, get_csrf_token, downloadFile } from "../../apiService/requests";
 
 function FileStorage() {
     const navigate = useNavigate();
@@ -12,6 +12,7 @@ function FileStorage() {
     const [files, setFiles] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
     //отправляем пользователя домой если не авторизован.
     useEffect(() => {
     if(!sessionid && !isAuthenticated) {
@@ -58,6 +59,30 @@ function FileStorage() {
       setError(err.message);
     }
   };
+    //запрос на загрузку файла.
+    const handleDownload = async (e, file_id, file_name) => {
+      e.preventDefault(); 
+      try {
+        setLoading(true)
+        const response = await downloadFile(file_id);
+      if(!response.ok) {
+        throw new Error('Ошибка загрузки файла.')
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href =url;
+      link.setAttribute('download',`${file_name}`)
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.log('Ошибка загрузки файла', error)
+      } finally {
+        setLoading(false)
+      }
+    };
 
   const handleEdit = async (id) => {
     //some logic for editing file.
@@ -90,7 +115,8 @@ function FileStorage() {
                 <td>{file.id}</td>
                 <td>
  {/* Ссылка на скачивание файла */}
-                  <a href={file.download_url || `/api/download/${file.id}`} target="_blank" rel="noopener noreferrer">
+                  {/* <a href={file.download_url || `/api/download/${file.id}/`} target="_blank" rel="noopener noreferrer"> {file.original_name}</a> */}
+                  <a href="#" rel="noopener noreferrer" onClick={(e) => handleDownload(e, file.id, file.original_name)}>
                     {file.original_name}
                   </a>
                 </td>

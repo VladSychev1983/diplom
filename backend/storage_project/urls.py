@@ -4,7 +4,7 @@ from rest_framework import routers
 from storage_app.views import RegisterView
 from storage_app.views import LoginView, LogoutView
 from storage_app.views import AdminUsersZone,AdminFilesZone
-from storage_app.views import get_csrf_token
+from storage_app.views import get_csrf_token,download_file_view
 from storage_app.views import UserFilesView
 
 router = routers.DefaultRouter()
@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/register',RegisterView.as_view(), name='register'),
     path('api/login', LoginView, name='login' ),
     path('api/logout', LogoutView, name='logout'),
-    path('api/get-csrf/', get_csrf_token, name='get-csrf')
+    path('api/get-csrf/', get_csrf_token, name='get-csrf'),
+    path('api/download/<file_id>/', download_file_view, name='download')
 ] 
 urlpatterns += router.urls

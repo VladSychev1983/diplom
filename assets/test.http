@@ -106,3 +106,13 @@ Cookie: sessionid=exs37og9s7sos5hkbiawnno68lgp9fg2; expires=Tue, 16 Dec 2025 11:
 Cookie: csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:49 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
 
 description=Файл пользователя test7 новый
+
+### download file (id)
+GET http://127.0.0.1:8000/api/download/9/ HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:55:19 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
+
+### download file (uuid)
+GET http://127.0.0.1:8000/api/download/123e4567-e89b-12d3-a456-426614174000 HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Cookie: sessionid=e1v482vgpu8izahpuom9nd5t01sjmiql; expires=Mon, 15 Dec 2025 19:55:19 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax

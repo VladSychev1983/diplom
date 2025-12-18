@@ -14,8 +14,7 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework import viewsets
 from django.contrib.sessions.models import Session
-import logging
-import json
+import re,os,json,logging
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.middleware.csrf import get_token
 
@@ -199,3 +198,30 @@ class UserFilesView(viewsets.ModelViewSet):
         logger.critical(f"[ERR] {self.request.user.username} is deleted file {instance.file.name}")
         self.perform_destroy(instance)
         return JsonResponse({'success':'file was removed.'}, status=204)
+
+#скачивание файлов.
+def download_file_view(request, file_id):
+    uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
+    isfile_uuid = uuid_pattern.match(file_id)
+    #если file_id это uuid загружаем по специальной ссылке.
+    if(bool(isfile_uuid)):
+        #логика запроса по специальной ссылке.
+        logger.info(f'запрос по специальной ссылке.')
+        
+        return JsonResponse({"success":"запрос по специальной ссылке."}, json_dumps_params={'ensure_ascii': False}, status=200)      
+    else:
+        #логика запроса по id файла.
+        logger.info(f'запрос по обычному id')
+        try:
+            file_record = Storage.objects.get(id=file_id, owner=request.user)
+        except Storage.DoesNotExist:
+            return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404)
+        file_path = file_record.file.path
+        if not os.path.exists(file_path):
+            logger.error(f"Ошибка! Файл не найден {file_path}")
+            return JsonResponse({"detail": "Файл поврежден или отсутствует на сервере"},json_dumps_params={'ensure_ascii': False}, status=500)
+        logger.info(f"Пользователь {request.user.username} скачал файл ID: {file_id}")
+        response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
+        return response
+
+

@@ -7,22 +7,6 @@ export function get_csrf_token() {
     return fetch(`${HOST_URL}/api/get-csrf/`)
 }
 
-// const fetchCsrfToken = async () => {
-//       const response = await fetch(`${HOST_URL}/api/get-csrf/`, {
-//     method: 'GET',
-//     credentials: 'include', 
-//   });
-//     if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const data = await response.json();
-//         console.log("Response data:", data);
-//         console.log("CSRF Token received:", data.csrftoken);
-//         return data.csrftoken;
-// }
-
-console.log('[Requests.js] X-CSRFToken:', Cookies.get('csrftoken'))
-
 //user registration
 const signUP = async (formData) => {
     const response = await fetch(HOST_URL + '/api/register', {
@@ -95,7 +79,6 @@ const uploadFile =  async (formData) => {
         method: 'POST',
         headers: {
             'X-CSRFToken': Cookies.get('csrftoken'),
-            //'X-CSRFToken': 'o9xFaxK7imJTC4oSWEUUklvN625mIVNd',  
         },
         body: formData,
         cookie: `sessionid=${Cookies.get('sessionid')}`,
@@ -103,6 +86,19 @@ const uploadFile =  async (formData) => {
     });
     return response;
 }
+//download file
+const downloadFile = async (fileID) => {
+  console.log('[Request.js] try to download:',fileID)
+  const response = await fetch(HOST_URL +`/api/download/${fileID}/`, {
+    method: 'GET',
+    headers: {
+            'X-CSRFToken': Cookies.get('csrftoken'),
+        },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+    return response;
+}
 
 export { signUP, logout, signIN }
-export { getFiles, deleteFile, uploadFile }
+export { getFiles, deleteFile, uploadFile, downloadFile }
