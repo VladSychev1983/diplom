@@ -40,7 +40,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('username','password','first_name', 'last_name','email', 'is_superuser', 'is_active', 'is_staff');
+        extra_kwargs = {
+            'password' : {'write_only': True}
+        }
 
 class StorageSerializer(serializers.ModelSerializer):
     class Meta:
