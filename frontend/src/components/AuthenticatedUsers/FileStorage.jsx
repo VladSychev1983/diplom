@@ -123,7 +123,7 @@ function FileStorage() {
                 <td>{file.description}</td>
                 <td>
                   <button onClick={() => handleEdit(file.id)}>Редактировать</button>
-                  <button onClick={() => handleDelete(file.id)}>Удалить</button>
+                  <button onClick={() => {if (window.confirm(`Вы уверены, что хотите удалить файл ${file.original_name}`)) {  handleDelete(file.id)}}}>Удалить</button>
                 </td>
               </tr>
             ))}
