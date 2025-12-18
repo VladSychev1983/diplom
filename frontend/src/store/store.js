@@ -4,10 +4,11 @@ import { encryptTransform } from 'redux-persist-transform-encrypt'
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import rootReducer from './reducers'; 
+const storeKey = import.meta.env.VITE_APP_PERSIST_KEY;
 
 //encrypt localStorage root
 const encryptor = encryptTransform({
-  secretKey: 'a6dd65cf9ed618803736778e77e379c9',
+  secretKey: storeKey,
   onError: function (error) {
     console.log(error);
   },
