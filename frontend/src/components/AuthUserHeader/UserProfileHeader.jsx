@@ -10,7 +10,7 @@ const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 if (!isAuthenticated || !userData) {
     return (
         <React.Fragment>
-            <div>Войдите в аккаунт</div>
+            <div>Войдите в аккаунт или зарегистрируйтесь.</div>
         </React.Fragment>
     )
 }

@@ -50,7 +50,7 @@ function App() {
             
             {!isAuthenticated && (<li><Link to="/login">Войти</Link></li>)}
                     
-          {isAuthenticated && (<li><Link to="/files">Мои Файлы</Link></li>)}
+          {isAuthenticated && (<li><Link to="/files">Мои файлы</Link></li>)}
           
           {isAdmin && (<li><Link to="/admin">Администратор</Link></li>)}
   

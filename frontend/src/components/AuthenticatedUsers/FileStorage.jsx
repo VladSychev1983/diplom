@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormUpload from "./FormUpload";
-import { getFiles, deleteFile, get_csrf_token, downloadFile } from "../../apiService/requests";
+import { getFiles, deleteFile, downloadFile } from "../../apiService/requests";
 import { getFileInfo, editFile, HOST_URL } from "../../apiService/requests";
 import FormEdit from "./FormEdit";
 import CopyButton from "./CopyButton";
@@ -39,7 +39,6 @@ function FileStorage() {
     } = useQuery({
         queryKey: ['files', page], // Ключ меняется когда страница меняется.
         queryFn: async () => {
-            get_csrf_token();
             const response = await getFiles(page); // передаем в getFiles параметр страницы.
             if (!response.ok) throw new Error('Ошибка при загрузке списка файлов');
             return response.json(); // Ожидаем результат. { results: [], next: url, previous: url, count: num }

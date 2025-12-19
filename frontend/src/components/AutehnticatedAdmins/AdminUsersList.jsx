@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CheckPermissionHeader from "./CheckPermissionsHeader";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { get_csrf_token, getAdminUsers } from "../../apiService/requests";
+import { getAdminUsers } from "../../apiService/requests";
 import AdminUser from "./AdminUser";
 
 
@@ -19,7 +19,6 @@ const {
     } = useQuery({
         queryKey: ['users', page], // Ключ меняется когда страница меняется.
         queryFn: async () => {
-            get_csrf_token();
             const response = await getAdminUsers(page); // передаем в getAdminUsers параметр страницы.
             if (!response.ok) throw new Error('Ошибка при загрузке списка пользователей');
             return response.json(); // Ожидаем результат. { results: [], next: url, previous: url, count: num }
