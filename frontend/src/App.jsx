@@ -16,16 +16,12 @@ function App() {
 
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const userData = useSelector((state) => state.user?.userData);
-  const sessionid = useSelector((state) => state.user?.sessionId);
-  const csrftoken = useSelector((state) => state.user?.csrfToken);
   const [sendRequest, setSendRequest] = useState(false)
 
   const handlerLogout = () => {
     //e.preventDefault();
-    console.log('[App.jsx] sendRequest before set:', sendRequest)
     setSendRequest(true)
     console.log('clicked logout.')
-    console.log('[App.jsx] sendRequest before set:', sendRequest)
   }
 
   let isAdmin = null;
@@ -33,10 +29,6 @@ function App() {
     isAdmin = userData['is_superuser'];
   }
 
-
-  console.log("[App.jsx] SESSION ID IN REDUX:", sessionid);
-  console.log("[App.jsx] CSRF TOKEN ID IN REDUX:", csrftoken);
- 
   return (
     <React.Fragment>
        <UserProfileHeader />
