@@ -67,7 +67,7 @@ function FileStorage() {
     const handleDownload = async (e, file_id, file_name) => {
       e.preventDefault(); 
       try {
-        setIsDownloading(true)
+        setIsDownloading(true);
         const response = await downloadFile(file_id);
       if(!response.ok) {
         throw new Error('Ошибка загрузки файла.')
@@ -84,7 +84,8 @@ function FileStorage() {
       } catch (error) {
         console.log('Ошибка загрузки файла', error)
       } finally {
-        setIsDownloading(false)
+        setIsDownloading(false);
+        refreshFiles();
       }
     };
 
@@ -119,6 +120,22 @@ function FileStorage() {
     }
   }
 
+ const handleNoramlizeDate = (somedate) => {
+  if (!somedate) return '-'
+
+  const date = new Date(somedate);
+  //const normalDate = date.toLocaleDateString(); //format date 2025/12/9
+  const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(date);
+
+  return formattedDate;
+ }
+
     return (
     <React.Fragment>
           <div>
@@ -138,7 +155,10 @@ function FileStorage() {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Дата загрузки</th>
+              <th>Дата скачивания</th>
               <th>Оригинальное имя</th>
+              <th>Размер</th>
               <th>Описание</th>
               <th>Действия</th>
             </tr>
@@ -147,11 +167,16 @@ function FileStorage() {
             {data.results.map((file) => (
               <tr key={file.id}>
                 <td>{file.id}</td>
+                <td>{handleNoramlizeDate(file.uploaded_at)}</td>
+                 <td>{handleNoramlizeDate(file.downloaded_at)}</td>
                 <td>
  {/* Ссылка на скачивание файла */}
                   <a href="#" rel="noopener noreferrer" onClick={(e) => handleDownload(e, file.id, file.original_name)}>
                     {file.original_name}
                   </a>
+                </td>
+                <td>
+                  { file.size > 0 ? (<span> {file.size} MB</span>) : ("0 МБ")}
                 </td>
                 <td>{file.description}</td>
                 <td>

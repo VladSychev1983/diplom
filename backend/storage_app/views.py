@@ -17,8 +17,8 @@ from django.contrib.sessions.models import Session
 import re,os,json,logging
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from django.middleware.csrf import get_token
-import uuid
 from django.core.files.storage import FileSystemStorage
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -168,6 +168,7 @@ class UserFilesView(viewsets.ModelViewSet):
         #вызываем стандартную логику perform_create через serializer.save()
         return super().create(request, *args, **kwargs)
     
+    # загрузка файлов.
     def perform_create(self, serializer):
         #uploaded_file = self.request.FILES.get('file')
         uploaded_file = self.request.data.get('file')
@@ -176,6 +177,8 @@ class UserFilesView(viewsets.ModelViewSet):
             raise serializers.ValidationError("[WRN] No file part in the request")
         owner = self.request.user
         owner_id = self.request.user.id
+        file_size_bytes = uploaded_file.size
+        file_size_mb = file_size_bytes / (1024 * 1024)
         upload_path = os.path.join('user_files', str(owner_id))
         fs = FileSystemStorage()
         user_filename = self.request.data.get('original_name')
@@ -195,7 +198,7 @@ class UserFilesView(viewsets.ModelViewSet):
             
         actual_saved_path = fs.save(final_path_name, uploaded_file)
         try:
-            serializer.save(owner=owner, original_name=original_name_to_save, file=actual_saved_path)
+            serializer.save(owner=owner, original_name=original_name_to_save, file=actual_saved_path, size=file_size_mb)
             logger.info(f"[INFO] User {owner.username} uploaded file {actual_saved_path}")
         except Exception as e:
             logger.error(f"[ERR] Error saving to DB: {e}")
@@ -240,6 +243,8 @@ def download_file_view(request, file_id):
         logger.info(f'запрос по обычному id')
         try:
             file_record = Storage.objects.get(id=file_id, owner=request.user)
+            file_record.downloaded_at = timezone.now()
+            file_record.save()
         except Storage.DoesNotExist:
             return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404)
         file_path = file_record.file.path

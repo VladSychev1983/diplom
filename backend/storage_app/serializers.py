@@ -54,5 +54,5 @@ class StorageSerializer(serializers.ModelSerializer):
 class UserFilesSerializator(serializers.ModelSerializer):
     class Meta:
         model = Storage
-        fields = ['id', 'file', 'description', 'original_name', 'owner', 'uploaded_at']
+        fields = ['id', 'file', 'description', 'original_name', 'owner', 'uploaded_at', 'downloaded_at','size']
         read_only_fields = ('id','owner_id','uploaded_at', 'owner')
