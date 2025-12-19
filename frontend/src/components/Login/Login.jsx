@@ -24,16 +24,20 @@ function Login() {
 
     return (
         <React.Fragment>
-    <div>
-      <h1>Login to Your Account</h1>
-      <form onSubmit={handlerSubmit}>
-        <label htmlFor="username">Username:</label>
+    <div className="login_form_container">
+      <h1>Вход в систему</h1>
+      <form onSubmit={handlerSubmit} className="login_form">
+        <div  className="form_group">
+        <label htmlFor="username">Пользователь:</label>
         <input type="text" id="login_username" name="username" value={formData.username} onChange={handlerChange} required/>
         <br />
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="login_password" name="password" value={formData.password} onChange={handlerChange} />
+        </div>
+        <div  className="form_group">
+        <label htmlFor="password">Пароль:</label>
+        <input type="password"  id="login_password" name="password" value={formData.password} onChange={handlerChange} />
         <br />
-        <button type="submit">Login</button>
+        </div>
+        <button type="submit" className='login_form_submit'>Войти</button>
       </form>
     </div>
         {/* {передаем данные формы и триггер в компонент обработчик RegisterHandler  } */}

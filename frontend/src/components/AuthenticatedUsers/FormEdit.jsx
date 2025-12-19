@@ -20,9 +20,9 @@ const FormEdit = ({data, isOpen, onClose, onSave}) => {
           onSave(cleanData, data.id);
         }}>
           <label>Оригинальное имя:</label>
-          <input type="text" name="original_name" defaultValue={data.original_name}></input>        
+          <input className="edit_form_textarea" type="text" name="original_name" defaultValue={data.original_name}></input>        
           <label>Описание:</label>
-          <textarea name="description" defaultValue={data.description}></textarea> 
+          <textarea className="edit_form_textarea" name="description" defaultValue={data.description}></textarea> 
 
           <div className="modal-actions">
             <button type="button" onClick={onClose}>Отмена</button>

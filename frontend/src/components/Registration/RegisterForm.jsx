@@ -26,25 +26,35 @@ function RegisterForm() {
 
     return (
         <React.Fragment>
-            <div>
-      <h1>Register for an Account</h1>
-      <form onSubmit={handlerSubmit} >
-        <label htmlFor="username">Username:</label>
+            <div className="registration_form_container">
+      <h1>Регистрация</h1>
+      <form onSubmit={handlerSubmit} className="login_form" >
+        <div className="form_group">
+        <label htmlFor="username">Пользователь</label>
         <input type="text" id="username" name="username" value={formData.username} onChange={handlerChange} required/>
         <br />
-        <label htmlFor="email">Email:</label>
+        </div>
+        <div className="form_group">
+        <label htmlFor="email">Почта Email:</label>
         <input type="email" id="email" name="email" value={formData.email} onChange={handlerChange} required/>
+        </div>
         <br />
-        <label htmlFor="password">Password:</label>
+        <div className="form_group">
+        <label htmlFor="password">Пароль</label>
         <input type="password" id="password" name="password" value={formData.password} onChange={handlerChange} required/>
         <br />
-        <label htmlFor="first_name">Your name:</label>
+        </div>
+        <div className="form_group">
+        <label htmlFor="first_name">Ваше имя</label>
         <input type="text" id="first_name" name="first_name" value={formData.first_name} onChange={handlerChange} required />
         <br />
-          <label htmlFor="last_name">You last name:</label>
+        </div>
+         <div className="form_group">
+          <label htmlFor="last_name">Ваша фамилия:</label>
         <input type="text" id="last_name" name="last_name" value={formData.last_name} onChange={handlerChange} required />
         <br />
-        <button type="submit">Register</button>
+        </div>
+        <button type="submit" className="login_form_submit">Зарегистрироваться</button>
       </form>
     </div>
     {/* {передаем данные формы и триггер в компонент обработчик RegisterHandler  } */}

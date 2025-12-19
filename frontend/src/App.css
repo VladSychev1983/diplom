@@ -1,33 +1,29 @@
 body {
-  width: 80%;
-  height: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-direction: column; /* Элементы идут по колонке */
+  align-items: center; /* Центрирует по горизонтали */
+  justify-content: flex-start; /* Выравнивает по верху */
+  min-height: 100vh; /* Занимает всю высоту viewport */
+  margin: 0;
 }
 
-/* #root {
-  position: relative;
-  width: 1280px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  /* left: 8%; */
-  /* text-align: center; */
-/* }  */
 #root {
-  position: absolute;
-  width: 80%; /* Обязательно задаем ширину */
-  top:0;
-  
-  text-align: center;
+  /* Стили контейнера */
+  width: 80%;
+  padding: 20px;
+  text-align: center; /* Центрирование текста внутри контейнера */
 }
 /*  меню */
 .nav {
   position: relative;
-  background-color: lightcyan;
+  background-color: #007bff;
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.nav a {
+  color: white;
 }
 
 .nav li {
@@ -60,7 +56,7 @@ body {
 
 .modal-content {
   background: #fff;
-  padding: 24px;
+  padding: 40px;
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
@@ -87,27 +83,76 @@ body {
   width: 100%;
 }
 
-/*  размер текстового input */
 
-input[type="text"] {
-  width: 100%;       
-  padding: 10px 15px; 
-  font-size: 16px;    
-  border: 1px solid #ccc; 
-  border-radius: 4px; 
-  box-sizing: border-box; 
+/* формы регистрации и логина. */
+
+/* Общий контейнер для форм */
+.registration_form_container, .login_form_container {
+  max-width: 400px; /* Немного шире для длинных имен */
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  font-family: sans-serif;
 }
 
-input[type="file"] {
-  width: 250px;       
-  padding: 8px 10px; 
-  font-size: 16px;   
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-right: 10px;
+.registration_form_container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
 }
-textarea {
+
+/* Сама форма как колонка */
+.login_form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Равномерный отступ между полями */
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form_group label {
   font-size: 18px;
-  width: 100%; 
+  font-weight: 600;
+  color: #555;
+}
+
+.login_form input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box; 
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.login_form input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Кнопка на всю ширину */
+.login_form_submit {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff; /* Зеленый цвет для регистрации */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.login_form_submit:hover {
+  background-color:#007bff;
 }

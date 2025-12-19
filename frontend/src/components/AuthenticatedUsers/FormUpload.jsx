@@ -66,6 +66,7 @@ return (
       <h3>Загрузить файл</h3>
       <div style={{ margin: "10px"}}>
         <input
+        className="upload_form_input"
           type="text"
           placeholder="Описание файла"
           value={description}
@@ -75,6 +76,7 @@ return (
       </div>
       <div>
         <input
+          className="upload_form_input"
           type="text"
           placeholder="Оригинальное имя"
           value={originalname}
@@ -83,7 +85,7 @@ return (
         />
       </div>
         <div style={{ marginLeft: "20px"}}>
-        <input type="file" onChange={handleFileChange} disabled={uploading} />
+        <input type="file" className="upload_form_file" onChange={handleFileChange} disabled={uploading} />
       </div>
       <button type="submit" disabled={uploading} style={{ textAlign: "center"}}>
         {uploading ? 'Загрузка...' : 'Загрузить'}
