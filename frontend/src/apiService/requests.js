@@ -47,8 +47,8 @@ const signIN = async (formData) => {
 }
 
 //get owner files.
-const getFiles =  async () => {
-  const response = await fetch(`${HOST_URL}/ownerfiles`, {
+const getFiles =  async (page = 1) => {
+  const response = await fetch(`${HOST_URL}/ownerfiles/?page=${page}`, {
     method: 'GET',
     headers: {
         'X-CSRFToken': Cookies.get('csrftoken'),

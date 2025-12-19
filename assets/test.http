@@ -92,10 +92,10 @@ X-CSRFToken: 1bvgwtn1jawRiJpn3uxY7MQ9IYLdtiE4
 
 ### Users Manage files
 
-GET http://127.0.0.1:8000/ownerfiles HTTP/1.1
-X-CSRFToken: brHGuaa6xebJnKdIOM24NkZ2F9vVZshD
-Cookie: sessionid=exs37og9s7sos5hkbiawnno68lgp9fg2; expires=Tue, 16 Dec 2025 11:35:03 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
-Cookie: csrftoken=brHGuaa6xebJnKdIOM24NkZ2F9vVZshD; expires=Tue, 08 Dec 2026 11:35:49 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
+GET http://127.0.0.1:8000/ownerfiles/ HTTP/1.1
+X-CSRFToken: MkPO43FxCahuTrsODdJgjTa5vQfql42q
+Cookie: Cookie: sessionid=otozj1yk0glicpatmgm7disfsfzfy31j; expires=Thu, 25 Dec 2025 13:32:13 GMT; HttpOnly; Max-Age=604800; Path=/; SameSite=Lax
+Cookie: csrftoken=MkPO43FxCahuTrsODdJgjTa5vQfql42q; expires=Thu, 17 Dec 2026 13:32:13 GMT; HttpOnly; Max-Age=31449600; Path=/; SameSite=Lax
 
 ###edit file 
 ### id 7 можем патчить d 
