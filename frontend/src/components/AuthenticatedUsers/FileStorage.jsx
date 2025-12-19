@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormUpload from "./FormUpload";
 import { getFiles, deleteFile, get_csrf_token, downloadFile } from "../../apiService/requests";
-import { getFileInfo, editFile } from "../../apiService/requests";
+import { getFileInfo, editFile, HOST_URL } from "../../apiService/requests";
 import FormEdit from "./FormEdit";
+import CopyButton from "./CopyButton";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function FileStorage() {
@@ -160,6 +161,7 @@ function FileStorage() {
               <th>Оригинальное имя</th>
               <th>Размер</th>
               <th>Описание</th>
+              <th>Публичная ссылка</th>
               <th>Действия</th>
             </tr>
           </thead>
@@ -179,6 +181,7 @@ function FileStorage() {
                   { file.size > 0 ? (<span> {file.size} MB</span>) : ("0 МБ")}
                 </td>
                 <td>{file.description}</td>
+                <td> <CopyButton linkToCopy={`${HOST_URL}/api/download/${file.secret_name}`}/></td>
                 <td>
                   <button onClick={() => handleEdit(file.id)}>Редактировать</button>
                   <button onClick={() => {if (window.confirm(`Вы уверены, что хотите удалить файл ${file.original_name}`)) {  handleDelete(file.id)}}}>Удалить</button>
@@ -187,7 +190,7 @@ function FileStorage() {
             ))}
           </tbody>
         </table>
-        <div className="pagination-controls" style={{ textAlign:"center", marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div className="pagination-controls" style={{ textAlign:"center", marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center', justifyContent:"center" }}>
         <button onClick={() => setPage(old => Math.max(old - 1, 1))} disabled={page === 1}>Назад</button>
         <span>Страница { page }</span>
         <button onClick={() => { if (!isPlaceholderData && data.next) setPage(old => old + 1) }} 

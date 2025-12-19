@@ -233,14 +233,23 @@ def download_file_view(request, file_id):
     uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
     isfile_uuid = uuid_pattern.match(file_id)
     #если file_id это uuid загружаем по специальной ссылке.
-    if(bool(isfile_uuid)):
+    if(bool(isfile_uuid) and not request.user.is_authenticated):
         #логика запроса по специальной ссылке.
-        logger.info(f'запрос по специальной ссылке.')
-
-        return JsonResponse({"success":"запрос по специальной ссылке."}, json_dumps_params={'ensure_ascii': False}, status=200)      
-    else:
+        logger.info(f'[INFO] Получен запрос на скачивание файла {file_id} по специальной ссылке.')
+        file_record = Storage.objects.get(secret_name=file_id)
+        if file_record:
+            file_record.downloaded_at = timezone.now()
+            file_record.save()
+            file_path = file_record.file.path
+            if not os.path.exists(file_path):
+                logger.error(f"[ERR] Ошибка! Файл не найден {file_path}")
+                return JsonResponse({"detail": "Файл поврежден или отсутствует на сервере"},json_dumps_params={'ensure_ascii': False}, status=500)
+            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
+        return JsonResponse({"success":"запрос по специальной ссылке."}, json_dumps_params={'ensure_ascii': False}, status=200)
+          
+    if request.user.is_authenticated:
         #логика запроса по id файла.
-        logger.info(f'запрос по обычному id')
+        logger.info(f'[INFO] Получен запрос на скачивание файла {file_id} по id')
         try:
             file_record = Storage.objects.get(id=file_id, owner=request.user)
             file_record.downloaded_at = timezone.now()
@@ -249,10 +258,10 @@ def download_file_view(request, file_id):
             return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404)
         file_path = file_record.file.path
         if not os.path.exists(file_path):
-            logger.error(f"Ошибка! Файл не найден {file_path}")
+            logger.error(f"[ERR] Ошибка! Файл не найден {file_path}")
             return JsonResponse({"detail": "Файл поврежден или отсутствует на сервере"},json_dumps_params={'ensure_ascii': False}, status=500)
         logger.info(f"Пользователь {request.user.username} скачал файл ID: {file_id}")
         response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
         return response
-
+    return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404);
 

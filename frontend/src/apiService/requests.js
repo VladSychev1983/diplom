@@ -132,3 +132,4 @@ const editFile = async(updatedData, file_id) => {
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
+export { HOST_URL }

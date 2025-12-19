@@ -43,17 +43,17 @@ function App() {
       <nav>
         <ul className='nav'>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">Домой</Link>
           </li>
-            {!isAuthenticated && (<li><Link to="/register">Register</Link></li>)}
+            {!isAuthenticated && (<li><Link to="/register">Регистрация</Link></li>)}
             
-            {!isAuthenticated && (<li><Link to="/login">Login</Link></li>)}
+            {!isAuthenticated && (<li><Link to="/login">Войти</Link></li>)}
                     
-          {isAuthenticated && (<li><Link to="/files">Files</Link></li>)}
+          {isAuthenticated && (<li><Link to="/files">Мои Файлы</Link></li>)}
           
-          {isAdmin && (<li><Link to="/files">AdminArea</Link></li>)}
+          {isAdmin && (<li><Link to="/files">Администратор</Link></li>)}
   
-            {isAuthenticated && (<li><Link to="/logout" onClick={handlerLogout}>logout</Link></li>)}
+            {isAuthenticated && (<li><Link to="/logout" onClick={handlerLogout}>Выйти</Link></li>)}
           
         </ul>
       </nav>
