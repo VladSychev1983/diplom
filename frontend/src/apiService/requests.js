@@ -129,7 +129,21 @@ const editFile = async(updatedData, file_id) => {
   return response;
 }
 
+//Administrators queries.
+const getAdminUsers =  async (page = 1) => {
+  const response = await fetch(`${HOST_URL}/adminusers/?page=${page}`, {
+    method: 'GET',
+    headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL }
+export {getAdminUsers}

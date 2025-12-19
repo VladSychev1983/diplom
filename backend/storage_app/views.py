@@ -120,6 +120,9 @@ class AdminUsersZone(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer(queryset, many=True)
     permission_classes= [IsAuthenticated, IsAdminUser]
+    
+    def get_serializer_class(self):
+        return UserSerializer
 
 #запросы администратора управления файлами /adminfiles
 class AdminFilesZone(viewsets.ModelViewSet):
