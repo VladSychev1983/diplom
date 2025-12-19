@@ -87,7 +87,7 @@ return (
         <div style={{ marginLeft: "20px"}}>
         <input type="file" className="upload_form_file" onChange={handleFileChange} disabled={uploading} />
       </div>
-      <button type="submit" disabled={uploading} style={{ textAlign: "center"}}>
+      <button className="upload_form_submit" type="submit" disabled={uploading} style={{ textAlign: "center"}}>
         {uploading ? 'Загрузка...' : 'Загрузить'}
       </button>
       {message && <p style={{ marginTop: '10px', color: message.startsWith('Ошибка') ? 'red' : 'green' }}>{message}</p>}

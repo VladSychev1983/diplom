@@ -83,12 +83,29 @@ body {
   width: 100%;
 }
 
+/* форма загрузки файлов. */
+.upload_form_input {
+  width: 250px;
+  font-size: 18px;
+}
 
+.upload_form_file {
+   font-size: 18px;
+}
+.upload_form_submit {
+  position: relative;
+  right: 60px;
+  float: left;
+}
+.upload_form_submit:hover {
+    background-color: #007bff;
+    color:white;
+    font-weight: 500;
+}
 /* формы регистрации и логина. */
 
-/* Общий контейнер для форм */
 .registration_form_container, .login_form_container {
-  max-width: 400px; /* Немного шире для длинных имен */
+  max-width: 400px;
   margin: 50px auto;
   padding: 30px;
   border: 1px solid #ddd;
@@ -108,7 +125,7 @@ body {
 .login_form {
   display: flex;
   flex-direction: column;
-  gap: 5px; /* Равномерный отступ между полями */
+  gap: 5px; 
 }
 
 .form_group {
@@ -142,7 +159,7 @@ body {
 .login_form_submit {
   width: 100%;
   padding: 14px;
-  background-color: #007bff; /* Зеленый цвет для регистрации */
+  background-color: #007bff; 
   color: white;
   border: none;
   border-radius: 6px;
