@@ -80,10 +80,20 @@ body {
 /*  размер текстового input */
 
 input[type="text"] {
-  width: 250px;       /* Set a fixed width */
-  padding: 10px 15px; /* Add internal space (top/bottom, left/right) */
-  font-size: 16px;    /* Increase the text size */
-  border: 1px solid #ccc; /* Add a border */
-  border-radius: 4px; /* Rounded corners */
-  box-sizing: border-box; /* Ensures padding/border are included in the width */
+  width: 250px;       
+  padding: 10px 15px; 
+  font-size: 16px;    
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  box-sizing: border-box; 
+}
+
+input[type="file"] {
+  width: 250px;       
+  padding: 8px 10px; 
+  font-size: 16px;   
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-right: 10px;
 }
