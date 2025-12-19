@@ -7,8 +7,9 @@ import Logout from './components/Logout/Logout';
 import UserProfileHeader from './components/AuthUserHeader/UserProfileHeader';
 import FileStorage from './components/AuthenticatedUsers/FileStorage';
 import ProtectedUserRoutes from './components/Routes/AutentificatedRouters';
+import AdminRoutes from './components/Routes/AdminRouters';
 import { useSelector } from "react-redux";
-import Cookies from 'js-cookie';
+import AdminUsersList from './components/AutehnticatedAdmins/AdminUsersList';
 import './App.css'
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
                     
           {isAuthenticated && (<li><Link to="/files">Мои Файлы</Link></li>)}
           
-          {isAdmin && (<li><Link to="/files">Администратор</Link></li>)}
+          {isAdmin && (<li><Link to="/admin">Администратор</Link></li>)}
   
             {isAuthenticated && (<li><Link to="/logout" onClick={handlerLogout}>Выйти</Link></li>)}
           
@@ -68,6 +69,9 @@ function App() {
         <Route path="/logout" element={<Logout sendRequest={sendRequest} setSendRequest={setSendRequest} />} />
         </Route>
         {/* Protected Admin Routes */}
+        <Route element={< AdminRoutes />}>
+        <Route path="/admin"element={<AdminUsersList />} />
+        </Route>
       </Routes>
     </Router>
 

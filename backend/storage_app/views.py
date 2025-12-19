@@ -114,14 +114,14 @@ def LogoutView(request):
 """
 Admin Secret Zone
 """
-#запросы администратора управления пользователями /users
+#запросы администратора управления пользователями /adminusers
 User = get_user_model()
 class AdminUsersZone(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializer(queryset, many=True)
     permission_classes= [IsAuthenticated, IsAdminUser]
 
-#запросы администратора управления файлами /files
+#запросы администратора управления файлами /adminfiles
 class AdminFilesZone(viewsets.ModelViewSet):
     queryset = Storage.objects.all()
     serializer = StorageSerializer(queryset, many=True)
