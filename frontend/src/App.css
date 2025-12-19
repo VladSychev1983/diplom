@@ -1,19 +1,29 @@
 body {
-  width: 100%;
+  width: 80%;
   height: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#root {
+/* #root {
   position: relative;
   width: 1280px;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  /* left: 8%; */
+  /* text-align: center; */
+/* }  */
+#root {
+  position: absolute;
+  width: 80%; /* Обязательно задаем ширину */
+  top:0;
+  
   text-align: center;
-
 }
 /*  меню */
 .nav {
+  position: relative;
   background-color: lightcyan;
   list-style-type: none;
   padding: 0;

@@ -18,9 +18,9 @@ if (!isAuthenticated || !userData) {
     return (
         <React.Fragment>
             <div>
-                <h1>
+                <h3>
                     Добро пожаловать, {userData.first_name || userData.username }
-                </h1>
+                </h3>
                 <p>
                     Ваш email: {userData.email}
                 </p>

@@ -146,5 +146,5 @@ REST_FRAMEWORK = {
     },
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2     #Количество объектов на странице.  
+    'PAGE_SIZE': 5     #Количество объектов на странице.  
 }
