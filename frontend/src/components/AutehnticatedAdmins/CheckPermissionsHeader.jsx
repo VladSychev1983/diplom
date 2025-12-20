@@ -8,12 +8,12 @@ function CheckPermissionHeader() {
 const navigate = useNavigate();
 const userData = useSelector((state) => state.user?.userData);
 const isAuthenticated = useSelector((state) => state.user?.isAuthenticated);
-const isAdmin = useSelector((state) => state.user?.isAdmin);
+const isAdmin = useSelector((state) => state.user?.userData.is_superuser);
 const sessionid = useSelector((state) => state.user?.sessionid);
 
 //если пользователь не аутентифицирован или данные в redux отсутствуют.
    useEffect(() => {
-    if(!isAdmin) {
+    if(!isAdmin && !sessionid && !isAuthenticated) {
         navigate('/');
     return
     }
