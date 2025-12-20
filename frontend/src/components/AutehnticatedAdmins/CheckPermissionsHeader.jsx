@@ -13,7 +13,7 @@ const sessionid = useSelector((state) => state.user?.sessionid);
 
 //если пользователь не аутентифицирован или данные в redux отсутствуют.
    useEffect(() => {
-    if(!isAdmin && !sessionid && !isAuthenticated || !userData) {
+    if(!isAdmin) {
         navigate('/');
     return
     }
