@@ -1,3 +1,4 @@
+from itertools import count
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
@@ -7,6 +8,7 @@ from django.http import JsonResponse, FileResponse
 from .serializers import RegisterSerializer, UserSerializer, StorageSerializer
 from .serializers import UserFilesSerializator
 from django.contrib.auth.models import User
+from django.db.models import Sum, Count
 from .models import Storage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -123,6 +125,21 @@ class AdminUsersZone(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         return UserSerializer
+    
+    def get_queryset(self):
+        queryset = User.objects.all()
+        queryset = queryset.annotate(
+            size=Sum('files__size'),
+            count=Count('files__id', distinct=True)
+        )
+        return queryset
+    
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        logger.info(f"[INFO] Пользователь {request.user} получил доступ к списку пользователей.")
+        logger.debug(f"[DEBUG] Data отправлена во frontend: {response.data}")
+        return response
+       
 
 #запросы администратора управления файлами /adminfiles
 class AdminFilesZone(viewsets.ModelViewSet):

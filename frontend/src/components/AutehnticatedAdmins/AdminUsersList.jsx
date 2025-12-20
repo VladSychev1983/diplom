@@ -29,6 +29,7 @@ const {
     //helper для обновления данных.
 // eslint-disable-next-line no-unused-vars
 const refreshFiles = () => queryClient.invalidateQueries(['users']);
+console.log('[AdminUsersList.jsx] got data: ',data)
 
     return (
         <React.Fragment>
@@ -63,8 +64,8 @@ const refreshFiles = () => queryClient.invalidateQueries(['users']);
         first_name={user.first_name}
         last_name= {user.last_name}
         email={user.email}
-        countFiles={user?.countfiles}
-        sizeFiles={user?.sizefiles}
+        countFiles={user?.count}
+        sizeFiles={user?.size}
         isSuper={user.is_superuser}
         />
         ))}

@@ -38,9 +38,14 @@ class RegisterSerializer(serializers.ModelSerializer):
     
 """ Admin Area Serializer"""
 class UserSerializer(serializers.ModelSerializer):
+    size = serializers.IntegerField(read_only=True)
+    count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = User
-        fields = ('id','username','password','first_name', 'last_name','email', 'is_superuser', 'is_active', 'is_staff');
+        fields = ('id','username','password','first_name', 
+                  'last_name','email', 'is_superuser', 
+                  'is_active', 'is_staff', 'size', 'count');
         extra_kwargs = {
             'password' : {'write_only': True}
         }
