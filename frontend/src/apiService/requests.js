@@ -157,8 +157,23 @@ const updateAdminUsers = async(data, user_id) => {
   return response;
 }
 
+//delete user.
+const deleteAdminUsers =  async (data, id) => {
+  const response = await fetch(`${HOST_URL}/adminusers/${id}/`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+    body: JSON.stringify(data)
+  });
+  return response;
+}
+
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL }
-export {getAdminUsers, updateAdminUsers}
+export {getAdminUsers, updateAdminUsers, deleteAdminUsers}

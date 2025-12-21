@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { updateAdminUsers } from "../../apiService/requests";
+import { updateAdminUsers,deleteAdminUsers } from "../../apiService/requests";
 
 function AdminUser({id, username, first_name, last_name, email, 
     countFiles, sizeFiles, isSuper, refreshUsers }) {
@@ -17,11 +17,30 @@ const handlerChecked = async (event, user_obj) => {
     try {
         const response = await updateAdminUsers(data, id)
            if (!response.ok) {
-        throw new Error('Ошибка при удалении файла');
+        throw new Error('Ошибка смены прав пользователя:');
       }
       refreshUsers();
-    }catch (err) {
-        alert(err.message);
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+const handlerDelete = async (id) => {
+    if(id == 1) return  // заглушка от удаления администартора админ.
+    if (!window.confirm(`Вы уверены что хотите удалить пользователя ${id}?`)) return;
+
+    console.log('clicked delete:', id);
+    const data = {
+        'id': id
+    }
+    try{
+       const response = await deleteAdminUsers(data, id)
+        if (!response.ok) {
+        throw new Error('Ошибка при удалении пользователя:');
+      }
+      refreshUsers();
+    } catch (error) {
+        console.log(error.message)
     }
 }
 
@@ -41,7 +60,10 @@ return(
             (<input type="checkbox" checked={isChecked} onChange={(e) => handlerChecked(e, {id})}/>)
                 }
             </td>
-            <td>Edit Delete</td>
+            <td>
+            <button>Редактировать</button> 
+            <button onClick={() => handlerDelete(id)}>Удалить</button>    
+            </td>
         </tr>
         </React.Fragment>
     )

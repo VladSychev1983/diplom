@@ -21,6 +21,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from django.middleware.csrf import get_token
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -134,6 +135,14 @@ class AdminUsersZone(viewsets.ModelViewSet):
         )
         return queryset
     
+    def destroy(self, request, pk=None):
+        if pk == "1" and request.user.pk == 1:
+            return Response({"detail": "Вы не можете удалить суперюзера!"}, status=403)
+        user = get_object_or_404(User, pk=pk)
+        logger.critical(f"[CRITICAL] Admin {self.request.user} is deleting user: {user.username}")
+        user.delete()
+        return Response(status=204)
+
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         logger.info(f"[INFO] Пользователь {request.user} получил доступ к списку пользователей.")
