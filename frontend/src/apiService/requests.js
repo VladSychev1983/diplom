@@ -141,9 +141,24 @@ const getAdminUsers =  async (page = 1) => {
   });
   return response;
 }
+//update
+const updateAdminUsers = async(data, user_id) => {
+    console.log("[Requsts.js] Data for update:", data)
+    const response = await fetch(`${HOST_URL}/adminusers/${user_id}/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+    body: JSON.stringify(data)
+  });
+  return response;
+}
 
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL }
-export {getAdminUsers}
+export {getAdminUsers, updateAdminUsers}

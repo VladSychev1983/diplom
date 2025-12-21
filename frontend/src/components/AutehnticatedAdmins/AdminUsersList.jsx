@@ -28,7 +28,7 @@ const {
 
     //helper для обновления данных.
 // eslint-disable-next-line no-unused-vars
-const refreshFiles = () => queryClient.invalidateQueries(['users']);
+const refreshUsers = () => queryClient.invalidateQueries(['users']);
 console.log('[AdminUsersList.jsx] got data: ',data)
 
     return (
@@ -67,6 +67,7 @@ console.log('[AdminUsersList.jsx] got data: ',data)
         countFiles={user?.count}
         sizeFiles={user?.size}
         isSuper={user.is_superuser}
+        refreshUsers={refreshUsers}
         />
         ))}
     </tbody>
