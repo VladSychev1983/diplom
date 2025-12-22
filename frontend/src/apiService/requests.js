@@ -171,9 +171,22 @@ const deleteAdminUsers =  async (data, id) => {
   });
   return response;
 }
+//user info
+const getAdminUserInfo =  async (user_id) => {
+  const response = await fetch(`${HOST_URL}/adminusers/${user_id}/`, {
+    method: 'GET',
+    headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+
 
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
-export { HOST_URL }
+export { HOST_URL, getAdminUserInfo }
 export {getAdminUsers, updateAdminUsers, deleteAdminUsers}

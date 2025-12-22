@@ -3,7 +3,7 @@ import { useState } from "react";
 import { updateAdminUsers,deleteAdminUsers } from "../../apiService/requests";
 
 function AdminUser({id, username, first_name, last_name, email, 
-    countFiles, sizeFiles, isSuper, refreshUsers }) {
+    countFiles, sizeFiles, isSuper, refreshUsers, handlerEdit }) {
 const [isChecked, setIsChecked] = useState(isSuper);
 
 const handlerChecked = async (event, user_obj) => {
@@ -61,7 +61,7 @@ return(
                 }
             </td>
             <td>
-            <button>Редактировать</button> 
+            <button onClick={() => handlerEdit(id)}>Редактировать</button> 
             <button onClick={() => handlerDelete(id)}>Удалить</button>    
             </td>
         </tr>

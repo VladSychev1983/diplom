@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import CheckPermissionHeader from "./CheckPermissionsHeader";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAdminUsers } from "../../apiService/requests";
+import { getAdminUserInfo, getAdminUsers } from "../../apiService/requests";
 import AdminUser from "./AdminUser";
-
+import AdminFormEdit from "./AdminFormEdit";
+import { updateAdminUsers } from "../../apiService/requests";
 
 function AdminUserList(){
 const [page, setPage] = useState(1);  //страницы
 const queryClient = useQueryClient();
+
+//состояния редактирования пользователя.
+const [isModalOpen, setisModalOpen] = useState(null)
+const [editData, setEditData] = useState(null);
 
 // логика TanStack Query пагинации. 
 const { 
@@ -27,17 +32,54 @@ const {
     });
 
     //helper для обновления данных.
-// eslint-disable-next-line no-unused-vars
 const refreshUsers = () => queryClient.invalidateQueries(['users']);
 console.log('[AdminUsersList.jsx] got data: ',data)
 
+//обработчик при редактировании пользователя.
+
+const handlerEdit = async (user_id) => {
+    //логика при редактировании файла.
+    const response = await getAdminUserInfo(user_id);
+    const data = await response.json();
+    console.log('[AdminUsersList.jsx] getAdminUserInfo response:',data)
+    setEditData(data);
+    setisModalOpen(true);
+    console.log(response);
+  }
+
+const onClose = () => {
+    //при закрытии модального окна меняем состояния.
+    setisModalOpen(false);
+    setEditData(null)
+  }
+
+    const onSave = async (updatedData, user_id) => {
+    //логика обновления при редактировании.
+    console.log('[AdminUsersList.jsx] data for editUser:', updatedData)
+    try {
+    const response = await updateAdminUsers(updatedData, user_id);
+    if(response.ok) {
+      console.log("Данные успешно обновлены!");
+      //закрываем модальное окно и перезагружаем файлы.
+      onClose();
+      refreshUsers();
+    } else {
+      console.log("Ошибка при сохранении файла.")
+    }
+  } catch (error) {
+    console.error("Ошибка:", error.message);
+    }
+}
     return (
+    
         <React.Fragment>
             <div>
+                 {/* Компонент модального окна редактирования. */}
+      <AdminFormEdit isOpen={isModalOpen} data={editData} onClose={onClose} onSave={onSave} />
                 <h1>Управление пользователями</h1>
                 <CheckPermissionHeader />
                  <h2>Список Пользователей</h2>
-{isLoading && <p>Загрузка файлов...</p>}
+{isLoading && <p>Загрузка пользователей...</p>}
  {isError && <p style={{ color: 'red' }}>{queryError.message}</p>}
 {!isLoading && data?.results?.length > 0 ? (
     <>
@@ -68,6 +110,7 @@ console.log('[AdminUsersList.jsx] got data: ',data)
         sizeFiles={user?.size}
         isSuper={user.is_superuser}
         refreshUsers={refreshUsers}
+        handlerEdit={handlerEdit}
         />
         ))}
     </tbody>
