@@ -198,10 +198,22 @@ const createAdminUser = async (userData) => {
     return response
 }
 
+//получаем список файлов пользователя.
+const getAdminUserFiles =  async (user_id, page = 1) => {
+  const response = await fetch(`${HOST_URL}/adminfiles/${user_id}/?page=${page}`, {
+    method: 'GET',
+    headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
 
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL, getAdminUserInfo }
 export {getAdminUsers, updateAdminUsers, deleteAdminUsers}
-export {createAdminUser}
+export {createAdminUser, getAdminUserFiles}

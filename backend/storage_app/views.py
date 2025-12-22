@@ -158,10 +158,20 @@ class AdminFilesZone(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         return StorageSerializer
+    
+    def retrieve(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        print(f"[info] User with id={user_id} retrive files.")
+        queryset = Storage.objects.filter(owner_id=user_id).order_by('-uploaded_at')
+        #включаем стандрартную пагинацию drf.
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def list(self, request):
-        #user_id = request.user.id
-        #get session id from session.
         session_key = request.session.session_key
         user_id = get_user_id_from_session_key(session_key)
         if user_id:
@@ -171,6 +181,7 @@ class AdminFilesZone(viewsets.ModelViewSet):
         else:
             Response({'error':'Сессия пользователя не найдена.'})
         return Response(serializer.data)
+
 
 """
 Authentificated Users Zone 
@@ -262,7 +273,8 @@ def download_file_view(request, file_id):
     uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
     isfile_uuid = uuid_pattern.match(file_id)
     #если file_id это uuid загружаем по специальной ссылке.
-    if(bool(isfile_uuid) and not request.user.is_authenticated):
+    #if(bool(isfile_uuid) and not request.user.is_authenticated):
+    if(bool(isfile_uuid)):
         #логика запроса по специальной ссылке.
         logger.info(f'[INFO] Получен запрос на скачивание файла {file_id} по специальной ссылке.')
         file_record = Storage.objects.get(secret_name=file_id)
@@ -276,11 +288,14 @@ def download_file_view(request, file_id):
             return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
         return JsonResponse({"success":"запрос по специальной ссылке."}, json_dumps_params={'ensure_ascii': False}, status=200)
           
-    if request.user.is_authenticated:
+    if request.user.is_authenticated or request.user.is_superuser:
         #логика запроса по id файла.
         logger.info(f'[INFO] Получен запрос на скачивание файла {file_id} по id')
         try:
-            file_record = Storage.objects.get(id=file_id, owner=request.user)
+            if(request.user.is_superuser):
+                file_record = Storage.objects.get(id=file_id)
+            else:
+                file_record = Storage.objects.get(id=file_id, owner=request.user)
             file_record.downloaded_at = timezone.now()
             file_record.save()
         except Storage.DoesNotExist:
@@ -292,5 +307,5 @@ def download_file_view(request, file_id):
         logger.info(f"Пользователь {request.user.username} скачал файл ID: {file_id}")
         response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
         return response
-    return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404);
+    return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404)
 
