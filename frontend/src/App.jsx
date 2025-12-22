@@ -10,6 +10,7 @@ import ProtectedUserRoutes from './components/Routes/AutentificatedRouters';
 import AdminRoutes from './components/Routes/AdminRouters';
 import { useSelector } from "react-redux";
 import AdminUsersList from './components/AutehnticatedAdmins/AdminUsersList';
+import AdminUserFiles from './components/AutehnticatedAdmins/AdminUserFiles';
 import './App.css'
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
         {/* Protected Admin Routes */}
         <Route element={< AdminRoutes />}>
         <Route path="/admin"element={<AdminUsersList />} />
+        <Route path="/adminfiles/:id/:username"element={<AdminUserFiles />} />
         </Route>
       </Routes>
     </Router>

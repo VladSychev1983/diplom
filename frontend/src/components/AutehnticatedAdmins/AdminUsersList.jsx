@@ -5,6 +5,7 @@ import { createAdminUser, getAdminUserInfo, getAdminUsers } from "../../apiServi
 import AdminUser from "./AdminUser";
 import AdminFormEdit from "./AdminFormEdit";
 import AdminFormAdd from "./AdminFormAdd";
+import AdminUserFiles from "./AdminUserFiles";
 import { updateAdminUsers } from "../../apiService/requests";
 
 function AdminUserList(){
@@ -102,6 +103,15 @@ const onSaveNewUser = async (userData) => {
     console.error("Ошибка:", error.message);
     }
 }
+//рендерим файлы пользователя.
+const handlerFiles = (username, user_id) => {
+    const userData = {
+        'username':username,
+        'user_id':user_id
+    }
+    console.log('Try to render files:', userData)
+    // setUserObject(userData)
+}
 
     return (
     
@@ -147,6 +157,7 @@ const onSaveNewUser = async (userData) => {
         isSuper={user.is_superuser}
         refreshUsers={refreshUsers}
         handlerEdit={handlerEdit}
+        handlerFiles={handlerFiles}
         />
         ))}
     </tbody>

@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { updateAdminUsers,deleteAdminUsers } from "../../apiService/requests";
+import { Link } from "react-router-dom";
 
 function AdminUser({id, username, first_name, last_name, email, 
-    countFiles, sizeFiles, isSuper, refreshUsers, handlerEdit }) {
+    countFiles, sizeFiles, isSuper, refreshUsers, handlerEdit}) {
 const [isChecked, setIsChecked] = useState(isSuper);
 
 const handlerChecked = async (event, user_obj) => {
@@ -51,7 +52,17 @@ return(
             <td>{first_name}</td>
             <td>{last_name}</td>
             <td>{email}</td>
-            <td>{countFiles}</td>
+            <td>
+            <Link to={`/adminfiles/${id}/${username}`}
+    style={{ 
+      background: 'none', 
+      border: 'none', 
+      color: 'blue', 
+      textDecoration: 'underline', 
+      cursor: 'pointer', 
+      padding: 0 
+    }}>{countFiles}</Link>
+            </td>
             <td>{sizeFiles > 0 ? (<span>{sizeFiles} Мб </span>) : (<span>0 Мб</span>) }</td>
             <td>
             {username == 'admin' ? (
