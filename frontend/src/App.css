@@ -173,3 +173,15 @@ body {
 .login_form_submit:hover {
   background-color:#007bff;
 }
+
+.footer {
+    position: absolute;
+    text-align: center;
+    padding: 20px;
+    bottom: 0;
+    background-color: white;
+    color: black;
+    width: 80%;
+    box-sizing: border-box;
+  
+}
