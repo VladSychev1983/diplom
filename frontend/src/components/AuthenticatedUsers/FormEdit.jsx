@@ -15,7 +15,7 @@ const FormEdit = ({data, isOpen, onClose, onSave}) => {
           //получаем расширение файла из data.
           const extension = data.file.split('.').pop();
           const cleanData = { ...formValues, original_name: `${formValues.original_name}.${extension}`}
-          console.log('[FormEdit.jsx] send formData:', cleanData)
+          
           // Обновленные данные возвращаем в onSave handler.
           onSave(cleanData, data.id);
         }}>

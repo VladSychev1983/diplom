@@ -93,7 +93,6 @@ function FileStorage() {
     //логика при редактировании файла.
     const response = await getFileInfo(file_id);
     const data = await response.json();
-    console.log('[FileStorage.jsx] getFileInfo response:',data)
     setEditData(data);
     setisModalOpen(true);
     console.log(response);

@@ -1,4 +1,3 @@
-from itertools import count
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .permissions import IsAdminUser, IsOwnerOrReadOnly
 from rest_framework.views import APIView
@@ -12,7 +11,6 @@ from django.db.models import Sum, Count
 from .models import Storage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework import viewsets
 from django.contrib.sessions.models import Session
@@ -62,24 +60,21 @@ class RegisterView(APIView):
             user_instance = serializer.save()
             login(request, user_instance)
             response_data = {
-                "success":f"Username {request.data['username']} was created and logged in!",
+                "success":f"Пользователь {request.data['username']} был успешно создан и осуществил вход!",
                  "data": RegisterSerializer(user_instance).data
             }
-            logger.info(f'[INFO] Getted a request for registering user from IP {get_client_ip(request)}')
-            logger.info(f"[INFO] Username {request.data['username']} was created and logged in!")
+            logger.info(f'[INFO] Получен запрос на регистрацию пользователя {get_client_ip(request)}')
+            logger.info(f"[INFO] Пользователь {request.data['username']} был успешно создани и осуществил вход!")
             return  Response(data=response_data, status=201)
         else:
-            logger.info(f'[INFO] Getted a request for registering user from IP {get_client_ip(request)}')
-            logger.warning(f'[ERR] ERROR Username {request.data['username']} was not created!')
-            return JsonResponse({"error": "User is not created"})
+            logger.info(f'[INFO] Получен запос на регистрацию пользователя IP {get_client_ip(request)}')
+            logger.warning(f'[ERR] Ошибка! Пользователь {request.data['username']} не зарегистрирован!')
+            return JsonResponse({"error": "Ошибка регистрации пользователя"})
 
 # аутентификация пользователей.
 @csrf_exempt
 def LoginView(request):
     if request.method == 'POST':
-        # username = request.POST.get('username', None)
-        # password = request.POST.get('password', None)
-        # json format data
         data =json.loads(request.body)
         username = data.get('username')
         password = data.get('password')
@@ -87,32 +82,32 @@ def LoginView(request):
         if user is not None:
             login(request, user)
             response_data = {
-                "success":f"Username {username} was created and logged in!",
+                "success":f"Пользователь {username} успешно авторизовался!",
                  "data": UserSerializer(user).data
             }
-            logger.info(f'[INFO] User {username} was authentificated successfully.')
-            response = JsonResponse({"success":"Authorization was successful"})
+            logger.info(f'[INFO] Пользователь {username} успешно авторизовался в системе.')
+            response = JsonResponse({"success":"Успешная авторизация."})
             response.set_cookie("sessionid", request.session.session_key)
-            logger.info(f'[INFO] Getted an authentification request from IP {get_client_ip(request)}')
-            logger.info(f"[INFO] Username {username} was logged in!")
+            logger.info(f'[INFO] Получен запрос на авторизацию с IP {get_client_ip(request)}')
+            logger.info(f"[INFO] Пользователь {username} успешно авторизовался!")
             return JsonResponse(response_data, status=200)
         else:
-            logger.critical(f'[ERR] User {username} attempted register is failed. Incorrect credentials.')
-            return JsonResponse({"error":"Incorrect credentials"}, status=401)
+            logger.critical(f'[ERR] Ошибка пользователь {username} некорректно ввел логин или пароль.')
+            return JsonResponse({"error":"Неправильный логин или пароль"}, status=401)
     else:
-        logger.warning(f'[ERR] User {username} attempted register is metod not allowed.')
-        return JsonResponse({"error":"Method is not allowed."}, status=403)
+        logger.warning(f'[ERR] Пользователь {username} использовал неразрешенный метод.')
+        return JsonResponse({"error":"Данный метод запрещен."}, status=403)
 
 # выход пользователей.
 def LogoutView(request):
     if request.user.is_authenticated:
         logout(request)
-        response = JsonResponse({'success':"Logout was successful"})
+        response = JsonResponse({'success':"Успешный выход из системы."})
         request.session.flush()
         response.delete_cookie("sessionid")
         return response
     else:
-        return JsonResponse({'error':"User is not auth"})
+        return JsonResponse({'error':"Пользователь не авторизован!"})
 
 """
 Admin Secret Zone
@@ -139,14 +134,14 @@ class AdminUsersZone(viewsets.ModelViewSet):
         if pk == "1" and request.user.pk == 1:
             return Response({"detail": "Вы не можете удалить суперюзера!"}, status=403)
         user = get_object_or_404(User, pk=pk)
-        logger.critical(f"[CRITICAL] Admin {self.request.user} is deleting user: {user.username}")
+        logger.critical(f"[CRITICAL] Администратор {self.request.user} удалил пользователя {user.username}")
         user.delete()
         return Response(status=204)
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         logger.info(f"[INFO] Пользователь {request.user} получил доступ к списку пользователей.")
-        logger.debug(f"[DEBUG] Data отправлена во frontend: {response.data}")
+        logger.debug(f"[DEBUG] Данные отправлены во frontend: {response.data}")
         return response
        
 
@@ -161,7 +156,7 @@ class AdminFilesZone(viewsets.ModelViewSet):
     
     def retrieve(self, request, *args, **kwargs):
         user_id = kwargs.get('pk')
-        print(f"[info] User with id={user_id} retrive files.")
+        print(f"[INFO] Пользователь с id={user_id} изменил файлы")
         queryset = Storage.objects.filter(owner_id=user_id).order_by('-uploaded_at')
         #включаем стандрартную пагинацию drf.
         page = self.paginate_queryset(queryset)
@@ -177,7 +172,7 @@ class AdminFilesZone(viewsets.ModelViewSet):
         if user_id:
             queryset = Storage.objects.all().order_by('-uploaded_at')
             serializer = StorageSerializer(queryset, many=True)
-            print(f"[info] User with id={user_id} requests all files.")
+            print(f"[INFO] Пользователь id={user_id} запросил список файлов.")
         else:
             Response({'error':'Сессия пользователя не найдена.'})
         return Response(serializer.data)
@@ -201,20 +196,13 @@ class UserFilesView(viewsets.ModelViewSet):
         response = super().list(request, *args, **kwargs)
         response['Access-Control-Allow-Origin'] = '*'
         return response
-    
-    def create(self, request,*args, **kwargs):
-        print(f"DEBUGGING request.data: {request.data}")
-        print(f"DEBUGGING request.FILES: {request.FILES}")
-        #вызываем стандартную логику perform_create через serializer.save()
-        return super().create(request, *args, **kwargs)
-    
+        
     # загрузка файлов.
     def perform_create(self, serializer):
-        #uploaded_file = self.request.FILES.get('file')
         uploaded_file = self.request.data.get('file')
         if not uploaded_file:
-            logger.warning("[WRN] No files are attached in the request")
-            raise serializers.ValidationError("[WRN] No file part in the request")
+            logger.warning("[WRN] Отсутствует прикрепленный файл в запросе.")
+            raise serializers.ValidationError("[WRN] Нет файла в запросе.")
         owner = self.request.user
         owner_id = self.request.user.id
         file_size_bytes = uploaded_file.size
@@ -239,9 +227,9 @@ class UserFilesView(viewsets.ModelViewSet):
         actual_saved_path = fs.save(final_path_name, uploaded_file)
         try:
             serializer.save(owner=owner, original_name=original_name_to_save, file=actual_saved_path, size=file_size_mb)
-            logger.info(f"[INFO] User {owner.username} uploaded file {actual_saved_path}")
+            logger.info(f"[INFO] Пользователь {owner.username} загрузил файл {actual_saved_path}")
         except Exception as e:
-            logger.error(f"[ERR] Error saving to DB: {e}")
+            logger.error(f"[ERR] Ошибка сохранения в базу данных: {e}")
             raise serializers.ValidationError({"detail": "Ошибка сохранения в базу данных"})
 
     def perform_destroy(self, instance):
@@ -255,7 +243,7 @@ class UserFilesView(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        logger.info("[INFO] Edit file request data :", request.data)
+        logger.info("[INFO] Получен запрос на обновление файла:", request.data)
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -264,16 +252,14 @@ class UserFilesView(viewsets.ModelViewSet):
 
     def destroy(self, request,*args, **kwargs):
         instance = self.get_object()
-        logger.critical(f"[ERR] {self.request.user.username} is deleted file {instance.file.name}")
+        logger.critical(f"[DEBUG] Пользователь {self.request.user.username} удалил файл {instance.file.name}")
         self.perform_destroy(instance)
-        return JsonResponse({'success':'file was removed.'}, status=204)
+        return JsonResponse({'success':'Файл удален.'}, status=204)
 
 #скачивание файлов.
 def download_file_view(request, file_id):
     uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
     isfile_uuid = uuid_pattern.match(file_id)
-    #если file_id это uuid загружаем по специальной ссылке.
-    #if(bool(isfile_uuid) and not request.user.is_authenticated):
     if(bool(isfile_uuid)):
         #логика запроса по специальной ссылке.
         logger.info(f'[INFO] Получен запрос на скачивание файла {file_id} по специальной ссылке.')
@@ -308,4 +294,3 @@ def download_file_view(request, file_id):
         response = FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_record.original_name)
         return response
     return JsonResponse({"detail": "Файл не найден или нет доступа."}, json_dumps_params={'ensure_ascii': False}, status=404)
-

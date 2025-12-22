@@ -27,8 +27,6 @@ function LoginHandler({formData, sendRequest, setSendRequest}) {
                         const csrftoken = Cookies.get('csrftoken')
                         dispatch(setUser(result.data));
                         dispatch(setCsrfToken(csrftoken));
-                        console.log('[LoginHandler.jsx] sessionid:', Cookies.get('sessionid'))
-                        console.log('[LoginHandler.jsx] csrftoken:', Cookies.get('csrftoken'));
                         dispatch(syncAuthTokens());
                         dispatch(setCsrfToken(csrftoken));
         

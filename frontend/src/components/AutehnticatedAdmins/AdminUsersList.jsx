@@ -103,15 +103,6 @@ const onSaveNewUser = async (userData) => {
     console.error("Ошибка:", error.message);
     }
 }
-//рендерим файлы пользователя.
-const handlerFiles = (username, user_id) => {
-    const userData = {
-        'username':username,
-        'user_id':user_id
-    }
-    console.log('Try to render files:', userData)
-    // setUserObject(userData)
-}
 
     return (
     
@@ -157,7 +148,6 @@ const handlerFiles = (username, user_id) => {
         isSuper={user.is_superuser}
         refreshUsers={refreshUsers}
         handlerEdit={handlerEdit}
-        handlerFiles={handlerFiles}
         />
         ))}
     </tbody>

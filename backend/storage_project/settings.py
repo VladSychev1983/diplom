@@ -144,7 +144,11 @@ REST_FRAMEWORK = {
         'user':  '10000/day', # Лимит для UserRateThrottle
         'anon':  '1000/day', #Лимит для AnonRateThrottle
     },
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'UNICODE_JSON': True,
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5     #Количество объектов на странице.  
+    'PAGE_SIZE': 5     #Количество объектов на странице.
 }

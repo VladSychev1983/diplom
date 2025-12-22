@@ -36,9 +36,6 @@ function Login() {
         setErrorPassword([isValidPass.message]);
         return     
       }
-      
-      console.log('send username:', password)
-      console.log('isValid:',isValidPass)
       //вызываем useEffect в RegisterComponent.
       setSendRequest(true)
     }
