@@ -1,12 +1,18 @@
 import React from "react";
-import Counter from "./Counter";
+import { Link } from "react-router-dom";
 
 function Home()  {
 return (
 <React.Fragment>
     <div>
-      <h1>Welcome to the Home Page!</h1>
-      <p>This is the main content of your application.</p>
+  <h1>Добро пожаловать в облачное хранилище файлов.</h1>
+  <div style={{textAlign:"center", fontSize:25}}>
+Данное приложение позволяет сохранять файлы и обмениваться публичными ссылкам на загруженые файлы.
+<br />
+Пожалуйста  <Link to='/register'>зарегистрируйтесь</Link> или  <Link to='/login'>авторизуйтесь.</Link>
+<br />
+Приятного использования и отличного настроения!
+</div>
     </div>
     {/* <Counter /> */}
 </React.Fragment>
