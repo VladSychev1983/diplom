@@ -211,9 +211,23 @@ const getAdminUserFiles =  async (user_id, page = 1) => {
   return response;
 }
 
+//delete file by admin
+const deleteAdminFile =  async (id) => {
+  const response = await fetch(`${HOST_URL}/adminfiles/${id}/`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-CSRFToken': Cookies.get('csrftoken'),
+    },
+    cookie: `sessionid=${Cookies.get('sessionid')}`,
+    credentials: 'include',
+  });
+  return response;
+}
+
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL, getAdminUserInfo }
 export {getAdminUsers, updateAdminUsers, deleteAdminUsers}
-export {createAdminUser, getAdminUserFiles}
+export {createAdminUser, getAdminUserFiles, deleteAdminFile}

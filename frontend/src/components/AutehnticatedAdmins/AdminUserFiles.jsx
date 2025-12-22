@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAdminUserFiles } from "../../apiService/requests";
 import CopyButton from "../AuthenticatedUsers/CopyButton";
 import { HOST_URL } from "../../apiService/requests";
-import { downloadFile } from "../../apiService/requests";
+import { downloadFile, deleteAdminFile } from "../../apiService/requests";
 
 function AdminUserFiles() {
     const { id, username } = useParams();   // получаем параметры из router.
@@ -60,9 +60,21 @@ function AdminUserFiles() {
 
   return formattedDate;
  }
- const handleDelete =() =>{
-    console.log('click deleted')
- }
+
+  const handleDelete = async (id) => {
+    try {
+      // Запрос на удаление файла
+      const response = await deleteAdminFile(id);
+
+      if (!response.ok) {
+        throw new Error('Ошибка при удалении файла');
+      }
+      // Обновление списка файлов после успешного удаления
+      refreshFiles();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
      //запрос на загрузку файла.
     const handleDownload = async (e, file_id, file_name) => {
       e.preventDefault(); 
