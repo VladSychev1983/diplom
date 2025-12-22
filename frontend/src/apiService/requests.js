@@ -184,9 +184,24 @@ const getAdminUserInfo =  async (user_id) => {
   return response;
 }
 
+//user registration
+const createAdminUser = async (userData) => {
+    const response = await fetch(HOST_URL + '/adminusers/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': Cookies.get('csrftoken'),
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include',
+    });
+    return response
+}
+
 
 export { signUP, logout, signIN }
 export { getFiles, deleteFile, uploadFile, downloadFile }
 export { getFileInfo, editFile }
 export { HOST_URL, getAdminUserInfo }
 export {getAdminUsers, updateAdminUsers, deleteAdminUsers}
+export {createAdminUser}

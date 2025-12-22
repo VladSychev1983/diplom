@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import CheckPermissionHeader from "./CheckPermissionsHeader";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAdminUserInfo, getAdminUsers } from "../../apiService/requests";
+import { createAdminUser, getAdminUserInfo, getAdminUsers } from "../../apiService/requests";
 import AdminUser from "./AdminUser";
 import AdminFormEdit from "./AdminFormEdit";
+import AdminFormAdd from "./AdminFormAdd";
 import { updateAdminUsers } from "../../apiService/requests";
 
 function AdminUserList(){
@@ -13,6 +14,10 @@ const queryClient = useQueryClient();
 //состояния редактирования пользователя.
 const [isModalOpen, setisModalOpen] = useState(null)
 const [editData, setEditData] = useState(null);
+
+//состояния добавления нового пользователя.
+const [isModalOpenNewUser, setisModalOpenNewUser] = useState(null);
+const [NewUserData, setNewUserData] = useState(null);
 
 // логика TanStack Query пагинации. 
 const { 
@@ -31,7 +36,7 @@ const {
         placeholderData: (prev) => prev, // Отображаем данные пока происходит fetching next page
     });
 
-    //helper для обновления данных.
+//helper для обновления данных.
 const refreshUsers = () => queryClient.invalidateQueries(['users']);
 console.log('[AdminUsersList.jsx] got data: ',data)
 
@@ -53,7 +58,7 @@ const onClose = () => {
     setEditData(null)
   }
 
-    const onSave = async (updatedData, user_id) => {
+const onSave = async (updatedData, user_id) => {
     //логика обновления при редактировании.
     console.log('[AdminUsersList.jsx] data for editUser:', updatedData)
     try {
@@ -70,14 +75,45 @@ const onClose = () => {
     console.error("Ошибка:", error.message);
     }
 }
+
+const handlerCreateUser = () => {
+    setisModalOpenNewUser(true)
+}
+
+const onCloseNewUser = () => {
+    //при закрытии модального окна меняем состояния.
+    setisModalOpenNewUser(false);
+    setNewUserData(null)
+}
+
+const onSaveNewUser = async (userData) => {
+    //логика обновления при редактировании.
+    try {
+    const response = await createAdminUser(userData);
+    if(response.ok) {
+      console.log("Данные успешно обновлены!");
+      //закрываем модальное окно и перезагружаем файлы.
+      onCloseNewUser();
+      refreshUsers();
+    } else {
+      console.log("Ошибка при добавлении пользователя.")
+    }
+  } catch (error) {
+    console.error("Ошибка:", error.message);
+    }
+}
+
     return (
     
         <React.Fragment>
             <div>
+                {/* Компонент модального окна добавления нового пользователя.. */}
+      <AdminFormAdd isOpenNewUser={isModalOpenNewUser} onCloseNewUser={onCloseNewUser} onSaveNewUser={onSaveNewUser} />
+
                  {/* Компонент модального окна редактирования. */}
       <AdminFormEdit isOpen={isModalOpen} data={editData} onClose={onClose} onSave={onSave} />
                 <h1>Управление пользователями</h1>
-                <CheckPermissionHeader />
+                <CheckPermissionHeader handlerCreateUser={handlerCreateUser} />
                  <h2>Список Пользователей</h2>
 {isLoading && <p>Загрузка пользователей...</p>}
  {isError && <p style={{ color: 'red' }}>{queryError.message}</p>}

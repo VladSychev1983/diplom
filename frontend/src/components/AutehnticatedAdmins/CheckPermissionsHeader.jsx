@@ -3,7 +3,7 @@ import {useEffect} from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-function CheckPermissionHeader() {
+function CheckPermissionHeader({handlerCreateUser}) {
 //получаем данные из redux.
 const navigate = useNavigate();
 const userData = useSelector((state) => state.user?.userData);
@@ -21,7 +21,7 @@ const sessionid = useSelector((state) => state.user?.sessionid);
     return (
    <React.Fragment>
         <div>
-        <button style={{marginBottom:10}}>Новый пользователь</button>
+        <button onClick={handlerCreateUser} style={{marginBottom:10}}>Новый пользователь</button>
         </div>
 </React.Fragment>
     )
