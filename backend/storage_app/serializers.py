@@ -49,6 +49,12 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password' : {'write_only': True}
         }
+    
+    def create(self, validated_data):
+        instance = User.objects.create(**validated_data)
+        instance.set_password(validated_data['password'])
+        instance.save() 
+        return instance
 
 class StorageSerializer(serializers.ModelSerializer):
     class Meta:
