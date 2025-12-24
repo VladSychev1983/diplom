@@ -1,6 +1,8 @@
 # Облачное хранилище файлов.
 ## Данное приложение позволяте сохранять файлы и обмениваться публичными ссылками на загруженные файлы.
 
+![Alt text](images/picture1.PNG)
+
 ## Общее описание возможностей.
 
 * Регистрация пользователя.
@@ -14,7 +16,11 @@
 * Возможность редактирования файла.
 * Административная панель для управления пользователями и файлами.
 
-![Alt text](images/picture1.PNG)
+## Используемый стек технологий.
+
+При разработки использованы языки Python, Javascript. <br/>
+В качестве Backend REST API использовался django rest_framework c авторизацией по сессиям.<br/>
+Frontend часть разработана с использованием React с jsx технологиями React Router, Redux.  <br/>
 
 ## Развертывание системы на Linux Ubuntu.
 
@@ -76,3 +82,34 @@ sudo apt-get install docker.io docker-compose docker-compose-plugin -y
 ```
 sudo apt-get install docker-buildx-plugin
 ```
+5. **Запускаем сборку проекта.**
+
+собираем контейнеры backend и frontend.
+```
+sudo DOCKER_BUILDKIT=1 docker compose build --no-cache backend
+```
+запускаем.
+```
+sudo docker compose up -d
+```
+проверяем должны быть UP.
+```
+sudo docker compose ps
+```
+6. **Делаем необходимые миграции и настройки backend**
+
+делаем миграции в базу postgresql
+```
+sudo docker compose exec backend python manage.py migrate
+```
+собираем статические файлы и копируем в staticfiles
+```
+sudo docker compose exec backend python manage.py collectstatic --no-input
+```
+создаем суперпользователя системы.
+```
+sudo docker compose exec backend python manage.py createsuperuser
+```
+
+7. **Подключение.**
+http://ваш_ip
