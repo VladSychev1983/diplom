@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 //registration request.
-const HOST_URL = 'http://localhost:8000';
+const HOST_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export function get_csrf_token() {
     return fetch(`${HOST_URL}/api/get-csrf/`)

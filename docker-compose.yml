@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+  backend:
+    build: 
+      context: ./backend
+      network: host
+    restart: always
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    command: gunicorn storage_project.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: 
+      context: ./frontend
+      network: host
+      args:
+        - VITE_APP_PERSIST_KEY=${VITE_APP_PERSIST_KEY}
+        - VITE_API_URL=http://89.111.169.238:8000
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
