@@ -9,7 +9,7 @@
 * Возможность установить описание на загруженный файл.
 * Возможность установить оригинальное имя на загруженный файл.
 * Скачивание файла по прямой ссылке с оригинальным именем.
-* Формирование обезличенной публичной ссылки загруженный файл.
+* Формирование обезличенной публичной ссылки на загруженный файл.
 * Возможность удаления файла.
 * Возможность редактирования файла.
 * Административная панель для управления пользователями и файлами.
@@ -17,3 +17,26 @@
 ![Alt text](images/picture1.PNG)
 
 ## Развертывание системы на Linux Ubuntu.
+
+1. Клонируйте проект с использование git clone.
+
+2. Создайте файл .env следующего содеражания, положите его в корень проекта (там где docker-compose.yml)
+`#Django settings
+SECRET_KEY=<some key here>
+DEBUG=False
+
+#Database credentials
+DB_NAME=file_storage_db
+DB_USERNAME=<some user>
+DB_PASSWORD=<some user password>
+
+VITE_APP_PERSIST_KEY=<some key here>`
+
+3. Добавите Ваш внешиний IP в  
+backend/storage_project/settings_sessions.py
+CORS_ALLOWED_ORIGINS = [
+'http://ваш_ip',
+]
+CSRF_TRUSTED_ORIGINS = [
+'http://ваш_ip',
+]
