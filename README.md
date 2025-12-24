@@ -49,8 +49,16 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
 'http://ваш_ip',
 ]
+
 ```
-4. **Настройте Docker для работы с контейнерами.**
+4. ** Добавьте Ваш внешний IP в docker-compose.yml**
+```
+    args:
+        - VITE_APP_PERSIST_KEY=${VITE_APP_PERSIST_KEY}
+        - VITE_API_URL=http://ВАШ_IP:8000
+```
+
+5. **Настройте Docker для работы с контейнерами.**
 
 устанавливаем вспомогательные пакеты.
 ```
@@ -82,7 +90,7 @@ sudo apt-get install docker.io docker-compose docker-compose-plugin -y
 ```
 sudo apt-get install docker-buildx-plugin
 ```
-5. **Запускаем сборку проекта.**
+6. **Запускаем сборку проекта.**
 
 собираем контейнеры backend и frontend.
 ```
@@ -96,7 +104,7 @@ sudo docker compose up -d
 ```
 sudo docker compose ps
 ```
-6. **Делаем необходимые миграции и настройки backend**
+7. **Делаем необходимые миграции и настройки backend**
 
 делаем миграции в базу postgresql
 ```
@@ -111,6 +119,6 @@ sudo docker compose exec backend python manage.py collectstatic --no-input
 sudo docker compose exec backend python manage.py createsuperuser
 ```
 
-7. **Подключение.**
+8. **Подключение.**
 
 `http://ваш_внешний_ip`
