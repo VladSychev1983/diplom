@@ -112,4 +112,5 @@ sudo docker compose exec backend python manage.py createsuperuser
 ```
 
 7. **Подключение.**
-http://ваш_ip
+
+`http://ваш_внешний_ip`
