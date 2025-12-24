@@ -26,7 +26,7 @@ Frontend часть разработана с использованием React
 
 1. **Клонируйте проект с использование git clone.**
 
-2. **Создайте файл .env следующего содеражания, положите его в корень проекта (там где docker-compose.yml)**<br>
+2. **Создайте файл .env следующего содеражания, положите его в корень проекта (там где docker-compose.yml)**
 ```
 #Django settings
 SECRET_KEY=<some key here>
@@ -40,8 +40,7 @@ DB_PASSWORD=<some user password>
 VITE_APP_PERSIST_KEY=<some key here>
 ```
 
-3. **Добавите Ваш внешиний IP в** 
-backend/storage_project/settings_sessions.py <br>
+3. **Добавите Ваш внешиний IP в backend/storage_project/settings_sessions.py**
 ```
 CORS_ALLOWED_ORIGINS = [
 'http://ваш_ip',
@@ -51,7 +50,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 ```
-4. ** Добавьте Ваш внешний IP в docker-compose.yml**
+4. **Добавьте Ваш внешний IP в docker-compose.yml**
 ```
     args:
         - VITE_APP_PERSIST_KEY=${VITE_APP_PERSIST_KEY}
