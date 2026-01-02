@@ -26,7 +26,7 @@ const handleSubmit = async (e) => {
     const uploadedFileName = file.name;
     const finalOriginalName = originalname || uploadedFileName;
     const finalDescriptionName = description || finalOriginalName;
-
+	//end
 // Использование объекта FormData для multipart/form-data запроса
 const formData = new FormData();
 formData.append('file', file); // 'file' - имя поля, ожидаемое на сервере
