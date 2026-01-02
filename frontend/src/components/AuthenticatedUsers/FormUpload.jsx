@@ -22,13 +22,18 @@ const handleSubmit = async (e) => {
     }
     setUploading(true);
     setMessage('');
+    // проверяем существовоние полей desciprion и original_name
+    const uploadedFileName = file.name;
+    const finalOriginalName = originalname || uploadedFileName;
+    const finalDescriptionName = description || finalOriginalName;
 
 // Использование объекта FormData для multipart/form-data запроса
 const formData = new FormData();
 formData.append('file', file); // 'file' - имя поля, ожидаемое на сервере
-formData.append('description', description); // Дополнительные данные
-formData.append('original_name', originalname);
-//formData.append('owner', userData['id'])
+formData.append('description', finalDescriptionName); // Дополнительные данные
+formData.append('original_name', finalOriginalName);
+
+	//formData.append('owner', userData['id'])
 console.log('[FormUpload.jsx] formData:',formData);
 
 const fetchData =  async (formData) => {
