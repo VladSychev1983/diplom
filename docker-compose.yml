@@ -14,6 +14,8 @@ services:
       context: ./backend
       network: host
     restart: always
+    volumes:
+      - ./user_files:/app/user_files
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USERNAME}
@@ -33,7 +35,7 @@ services:
       network: host
       args:
         - VITE_APP_PERSIST_KEY=${VITE_APP_PERSIST_KEY}
-        - VITE_API_URL=http://89.111.169.238:8000
+        - VITE_API_URL=${VITE_API_URL}
     restart: always
     env_file:
       - .env

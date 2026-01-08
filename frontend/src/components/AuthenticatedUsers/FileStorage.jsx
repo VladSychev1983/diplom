@@ -179,7 +179,8 @@ function FileStorage() {
                   { file.size > 0 ? (<span> {file.size} MB</span>) : ("0 МБ")}
                 </td>
                 <td>{file.description}</td>
-                <td> <CopyButton linkToCopy={`${HOST_URL}/api/download/${file.secret_name}`}/></td>
+		    {/*<td> <CopyButton linkToCopy={`${HOST_URL}/api/download/${file.secret_name}`}/></td> */}
+		    <td> <a href={`/api/download/${file.secret_name}`}>Публичная ссылка</a></td>
                 <td>
                   <button onClick={() => handleEdit(file.id)}>Редактировать</button>
                   <button onClick={() => {if (window.confirm(`Вы уверены, что хотите удалить файл ${file.original_name}`)) {  handleDelete(file.id)}}}>Удалить</button>
